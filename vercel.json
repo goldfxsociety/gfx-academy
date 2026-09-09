@@ -1,0 +1,9 @@
+{
+  "rewrites": [
+    { "source": "/academy",      "destination": "/academy.html"    },
+    { "source": "/ib-builder",   "destination": "/ib-builder.html" },
+    { "source": "/api/shorten",  "destination": "/api/shorten.js"  },
+    { "source": "/api/debug",    "destination": "/api/debug.js"    },
+    { "source": "/r/:code",      "destination": "/api/redirect.js" }
+  ]
+}

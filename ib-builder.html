@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GFX Academy — IB Link Builder</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--gold:#D4A017;--gold-light:#F0C040;--gold-dim:#8A6500;--purple-deep:#1A0A2E;--purple-mid:#2D1B4E;--purple-card:#3A2460;--purple-border:#5A3A90;--text-main:#F5F0FF;--text-muted:#C4B5D4;--text-dim:#8A7AAA;--success:#3DCB8A;--danger:#E05555;}
+body{font-family:'Inter',sans-serif;background:var(--purple-deep);color:var(--text-main);min-height:100vh;max-width:520px;margin:0 auto;padding:24px 16px 48px}
+.header{text-align:center;padding:24px 0 22px;border-bottom:1px solid var(--purple-border);margin-bottom:24px}
+.logo{display:inline-flex;align-items:center;gap:8px;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--gold);letter-spacing:1.5px;margin-bottom:12px;text-transform:uppercase}
+.page-title{font-family:'Syne',sans-serif;font-size:24px;font-weight:700;margin-bottom:6px}
+.page-sub{font-size:13px;color:var(--text-muted);line-height:1.7;max-width:380px;margin:0 auto}
+.card{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:16px;padding:22px;margin-bottom:16px}
+.card-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:600;color:var(--gold);margin-bottom:4px}
+.card-sub{font-size:12px;color:var(--text-muted);margin-bottom:20px;line-height:1.6}
+.field{margin-bottom:16px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.field label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;display:block;margin-bottom:5px;font-weight:500}
+.field input{width:100%;background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;padding:11px 13px;color:var(--text-main);font-family:'Inter',sans-serif;font-size:13px;transition:border-color .2s}
+.field input:focus{outline:none;border-color:var(--gold)}
+.field input::placeholder{color:var(--text-dim)}
+.field input.has-value{border-color:var(--gold-dim)}
+.field-hint{font-size:11px;color:var(--text-dim);margin-top:5px;line-height:1.5}
+.default-badge{display:inline-flex;align-items:center;gap:4px;background:var(--purple-card);border:1px solid var(--purple-border);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--text-dim);margin-top:4px}
+.divider{border:none;border-top:1px solid var(--purple-border);margin:20px 0}
+.generate-btn{width:100%;background:var(--gold);color:#1A0A2E;border:none;border-radius:10px;padding:15px;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.generate-btn:active{opacity:.85}
+.generate-btn:disabled{opacity:.5;cursor:not-allowed}
+.err{font-size:12px;color:var(--danger);margin-top:10px;padding:10px 13px;background:#3D0D0D;border-radius:8px;display:none}
+/* Result */
+.result-card{background:var(--purple-card);border:1px solid var(--success);border-radius:12px;padding:18px;margin-top:16px;display:none}
+.result-label{font-size:11px;color:var(--success);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px;display:flex;align-items:center;gap:5px}
+.result-url{font-size:11px;color:var(--text-muted);word-break:break-all;line-height:1.8;background:var(--purple-deep);border-radius:8px;padding:13px;border:1px solid var(--purple-border);margin-bottom:14px;font-family:'Inter',sans-serif}
+.copy-btn{width:100%;background:var(--gold);color:#1A0A2E;border:none;border-radius:8px;padding:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;margin-bottom:8px}
+.copy-btn:active{opacity:.85}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.shorten-btn{width:100%;background:var(--purple-mid);color:var(--text-main);border:1px solid var(--purple-border);border-radius:8px;padding:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s}
+.shorten-btn:hover{border-color:var(--gold);color:var(--gold)}
+.shorten-btn:disabled{opacity:.5;cursor:not-allowed}
+.short-url-wrap{background:var(--purple-deep);border:1px solid var(--success);border-radius:8px;padding:12px 13px;margin-bottom:12px;display:none}
+.short-url-label{font-size:10px;color:var(--success);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+.short-url-row{display:flex;align-items:center;gap:8px}
+.short-url-text{font-size:13px;color:var(--gold-light);font-weight:600;flex:1;word-break:break-all}
+.short-copy-btn{background:var(--success);color:#1A0A2E;border:none;border-radius:6px;padding:7px 12px;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0;transition:opacity .2s}
+.short-copy-btn:active{opacity:.8}
+.short-err{font-size:11px;color:var(--danger);margin-bottom:10px;display:none;padding:8px 10px;background:#3D0D0D;border-radius:6px}
+/* Preview */
+.preview-wrap{border-top:1px solid var(--purple-border);padding-top:14px;margin-top:4px}
+.preview-label{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.preview-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.preview-icon{width:28px;height:28px;border-radius:7px;background:var(--purple-mid);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.preview-icon i{font-size:14px;color:var(--text-dim)}
+.preview-info{flex:1;min-width:0}
+.preview-info-label{font-size:10px;color:var(--text-dim);margin-bottom:2px}
+.preview-info-value{font-size:12px;color:var(--text-muted);word-break:break-all;line-height:1.5}
+.preview-info-value.custom{color:var(--gold-light)}
+.preview-info-value.default-val{color:var(--text-dim)}
+/* How it works */
+.how-card{background:var(--purple-card);border:1px solid var(--purple-border);border-radius:14px;padding:18px}
+.how-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:600;color:var(--text-main);margin-bottom:14px;display:flex;align-items:center;gap:7px}
+.step{display:flex;gap:12px;margin-bottom:14px;align-items:flex-start}
+.step:last-child{margin-bottom:0}
+.step-num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:#1A0A2E;font-family:'Syne',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-text{font-size:13px;color:var(--text-muted);line-height:1.65}
+.step-text strong{color:var(--text-main);font-weight:500}
+/* Params reference */
+.params-card{background:var(--purple-deep);border:1px solid var(--purple-border);border-radius:10px;padding:14px;margin-top:14px}
+.params-title{font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.6px;margin-bottom:10px}
+.param-row{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.param-key{font-family:'Inter',sans-serif;font-size:11px;color:var(--gold);background:var(--purple-card);padding:2px 7px;border-radius:4px;flex-shrink:0}
+.param-desc{font-size:11px;color:var(--text-dim)}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo"><i class="ti ti-award"></i> GFX Trading Academy</div>
+  <div class="page-title">IB Link Builder</div>
+  <p class="page-sub">Generate a personalized academy URL for each sub-IB. They share it with their students — no code changes, no setup needed.</p>
+</div>
+
+<!-- BUILDER FORM -->
+<div class="card">
+  <div class="card-title">Sub-IB Details</div>
+  <div class="card-sub">Fill in their links. Any field left blank falls back to your GFX Academy defaults automatically.</div>
+
+  <div class="field">
+    <label>Sub-IB Name <span style="color:var(--text-dim);font-weight:400">(optional)</span></label>
+    <input type="text" id="lb-name" placeholder="e.g. Maria Santos" maxlength="40" oninput="onFieldChange(this)">
+    <div class="field-hint">Shows a "Referred by Maria Santos" banner on the academy home screen.</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="field">
+    <label>ACCM Referral Link</label>
+    <input type="url" id="lb-accm" placeholder="https://accm.global/account/register?shareUserSetId=..." oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to your master ACCM link</div>
+  </div>
+
+  <div class="field">
+    <label>Messenger Community Link</label>
+    <input type="url" id="lb-community" placeholder="https://m.me/cm/..." oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to GFX Academy Messenger group</div>
+  </div>
+
+  <div class="field">
+    <label>Support / Facebook Profile Link</label>
+    <input type="url" id="lb-support" placeholder="https://www.facebook.com/their-profile" oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to your FB profile</div>
+  </div>
+
+  <div class="err" id="lb-err"><i class="ti ti-alert-circle"></i> Please fill in at least one field before generating.</div>
+  <button class="generate-btn" onclick="generateLink()"><i class="ti ti-link"></i> Generate Academy Link</button>
+
+  <!-- RESULT -->
+  <div class="result-card" id="result-card">
+    <div class="result-label"><i class="ti ti-check-circle"></i> Academy link ready</div>
+    <div class="result-url" id="result-url"></div>
+
+    <!-- Short URL display (shown after shortening) -->
+    <div class="short-url-wrap" id="short-url-wrap">
+      <div class="short-url-label"><i class="ti ti-bolt" style="font-size:11px"></i> Shortened link</div>
+      <div class="short-url-row">
+        <span class="short-url-text" id="short-url-text"></span>
+        <button class="short-copy-btn" onclick="copyShortLink()">Copy</button>
+      </div>
+    </div>
+    <div class="short-err" id="short-err"></div>
+
+    <!-- Action buttons -->
+    <div class="btn-row">
+      <button class="copy-btn" id="copy-btn" onclick="copyLink()" style="margin-bottom:0"><i class="ti ti-copy"></i> Copy Full Link</button>
+      <button class="shorten-btn" id="shorten-btn" onclick="shortenLink()"><i class="ti ti-bolt"></i> Shorten Link</button>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="preview-label">What students will see</div>
+      <div id="preview-rows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-card">
+  <div class="how-title"><i class="ti ti-info-circle" style="color:var(--gold)"></i> How it works</div>
+
+  <div class="step"><div class="step-num">1</div><div class="step-text">Fill in the sub-IB details above and click <strong>Generate Academy Link</strong>.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text">Copy the generated link and send it directly to your sub-IB. That is the only thing they need.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">When a student opens the link, the academy <strong>auto-configures</strong> with the sub-IB ACCM referral, their Messenger community, and their support contact.</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-text">If a name was set, students see a <strong>"Referred by [Name]"</strong> banner so they know exactly who to contact for help.</div></div>
+  <div class="step"><div class="step-num">5</div><div class="step-text">Any blank field falls back to your GFX Academy defaults — the academy always works even with a partial link.</div></div>
+
+  <div class="params-card">
+    <div class="params-title">URL Parameters Reference</div>
+    <div class="param-row"><span class="param-key">accm</span><span class="param-desc">Sub-IB ACCM referral link</span></div>
+    <div class="param-row"><span class="param-key">community</span><span class="param-desc">Messenger community link</span></div>
+    <div class="param-row"><span class="param-key">support</span><span class="param-desc">FB profile or support link</span></div>
+    <div class="param-row"><span class="param-key">ib</span><span class="param-desc">Sub-IB name (shows banner)</span></div>
+  </div>
+</div>
+
+<script>
+// ── YOUR DEFAULTS ─────────────────────────────────────────────────────────────
+const DEFAULTS = {
+  accm:      'https://accm.global/account/register?shareUserSetId=3a59d46d63f04393b',
+  community: 'https://m.me/cm/DT8JPfkzsMUWMvYy/',
+  support:   'https://www.facebook.com/benedictglvz',
+};
+
+// ── AUTO-DETECT ACADEMY URL ───────────────────────────────────────────────────
+// Works whether hosted at /academy, /academy.html, or any path
+const ACADEMY_BASE = (() => {
+  const url = new URL(window.location.href);
+  // Replace ib-builder with academy in the path
+  const path = url.pathname.replace(/ib-builder(\.html)?$/, 'academy');
+  return url.origin + path;
+})();
+
+let builtLink = '';
+let shortLink  = '';
+
+function onFieldChange(input) {
+  if (input.value.trim()) {
+    input.classList.add('has-value');
+  } else {
+    input.classList.remove('has-value');
+  }
+  // Hide result when inputs change
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('lb-err').style.display = 'none';
+  builtLink = '';
+}
+
+function generateLink() {
+  const name      = document.getElementById('lb-name').value.trim();
+  const accm      = document.getElementById('lb-accm').value.trim();
+  const community = document.getElementById('lb-community').value.trim();
+  const support   = document.getElementById('lb-support').value.trim();
+  const errEl     = document.getElementById('lb-err');
+
+  if (!name && !accm && !community && !support) {
+    errEl.style.display = 'flex'; return;
+  }
+  errEl.style.display = 'none';
+
+  const p = new URLSearchParams();
+  if (accm)      p.set('accm', accm);
+  if (community) p.set('community', community);
+  if (support)   p.set('support', support);
+  if (name)      p.set('ib', name);
+
+  builtLink = ACADEMY_BASE + (p.toString() ? '?' + p.toString() : '');
+
+  // Show result
+  document.getElementById('result-url').textContent = builtLink;
+  const rc = document.getElementById('result-card');
+  rc.style.display = 'block';
+
+  // Reset all buttons and short URL area
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.innerHTML = '<i class="ti ti-copy"></i> Copy Full Link';
+  copyBtn.style.background = 'var(--gold)';
+  copyBtn.style.color = '#1A0A2E';
+  const shortenBtn = document.getElementById('shorten-btn');
+  shortenBtn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link';
+  shortenBtn.disabled = false;
+  shortenBtn.style.borderColor = '';
+  shortenBtn.style.color = '';
+  document.getElementById('short-url-wrap').style.display = 'none';
+  document.getElementById('short-url-text').textContent = '';
+  document.getElementById('short-err').style.display = 'none';
+  shortLink = '';
+
+  // Build preview
+  const fields = [
+    { icon:'ti-id-badge',       label:'IB Banner',        value: name      || null, fallback: 'No banner (name not set)' },
+    { icon:'ti-external-link',  label:'ACCM Link',         value: accm      || null, fallback: DEFAULTS.accm },
+    { icon:'ti-brand-messenger',label:'Community',          value: community || null, fallback: DEFAULTS.community },
+    { icon:'ti-user',           label:'Support Contact',   value: support   || null, fallback: DEFAULTS.support },
+  ];
+
+  document.getElementById('preview-rows').innerHTML = fields.map(f => {
+    const isCustom = !!f.value;
+    const display  = f.value || f.fallback;
+    const isLink   = display.startsWith('http');
+    return `<div class="preview-row">
+      <div class="preview-icon"><i class="ti ${f.icon}"></i></div>
+      <div class="preview-info">
+        <div class="preview-info-label">${f.label} ${isCustom ? '<span style="color:var(--gold);font-size:9px">CUSTOM</span>' : '<span style="color:var(--text-dim);font-size:9px">DEFAULT</span>'}</div>
+        <div class="preview-info-value ${isCustom?'custom':'default-val'}">${isLink ? `<a href="${display}" target="_blank" style="color:inherit;text-decoration:none">${display}</a>` : display}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  rc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyLink() {
+  if (!builtLink) return;
+  try { navigator.clipboard.writeText(builtLink); } catch(e) {
+    const ta = document.createElement('textarea'); ta.value = builtLink;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  const btn = document.getElementById('copy-btn');
+  btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+  btn.style.background = 'var(--success)';
+  btn.style.color = '#1A0A2E';
+  setTimeout(() => {
+    btn.innerHTML = '<i class="ti ti-copy"></i> Copy Full Link';
+    btn.style.background = 'var(--gold)';
+    btn.style.color = '#1A0A2E';
+  }, 2500);
+}
+
+async function shortenLink() {
+  if (!builtLink) return;
+
+  // Already shortened this session — just re-show it
+  if (shortLink) {
+    document.getElementById('short-url-wrap').style.display = 'block';
+    return;
+  }
+
+  const btn    = document.getElementById('shorten-btn');
+  const errEl  = document.getElementById('short-err');
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Shortening...';
+  btn.disabled  = true;
+  errEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/shorten', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ url: builtLink }),
+    });
+
+    if (!res.ok) {
+      const { error } = await res.json().catch(() => ({}));
+      throw new Error(error || 'Server error ' + res.status);
+    }
+
+    const { short, reused } = await res.json();
+    shortLink = short;
+
+    document.getElementById('short-url-text').textContent = shortLink;
+    document.getElementById('short-url-wrap').style.display = 'block';
+
+    btn.innerHTML = `<i class="ti ti-check"></i> ${reused ? 'Already shortened' : 'Shortened!'}`;
+    btn.style.borderColor = 'var(--success)';
+    btn.style.color       = 'var(--success)';
+    btn.disabled = false;
+
+  } catch (err) {
+    console.error('Shorten error:', err);
+    btn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link';
+    btn.disabled  = false;
+    errEl.textContent = 'Could not shorten: ' + (err.message || 'unknown error');
+    errEl.style.display = 'block';
+  }
+}
+
+function copyShortLink() {
+  if (!shortLink) return;
+  try { navigator.clipboard.writeText(shortLink); } catch(e) {
+    const ta = document.createElement('textarea'); ta.value = shortLink;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  const btn = document.querySelector('.short-copy-btn');
+  const orig = btn.textContent;
+  btn.textContent = 'Copied!';
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+}
+</script>
+</body>
+</html>
