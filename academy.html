@@ -122,13 +122,13 @@ canvas.candle-canvas{background:var(--purple-card);border:1px solid var(--purple
 .gallery-card.bullish{border-color:#1a4a2e}
 .gallery-card.bearish{border-color:#4a1a1a}
 .gallery-card.neutral{border-color:var(--gold-dim)}
-.gallery-canvas-wrap{display:flex;justify-content:center;margin-bottom:8px}
-.gallery-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text-main);margin-bottom:3px}
-.gallery-signal{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-block}
+.gallery-canvas-wrap{display:flex;justify-content:center;margin-bottom:10px}
+.gallery-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:600;color:var(--text-main);margin-bottom:4px}
+.gallery-signal{font-size:10px;font-weight:600;padding:2px 8px;border-radius:10px;display:inline-block;margin-bottom:6px}
 .gallery-signal.bullish{background:#0D3322;color:var(--success)}
 .gallery-signal.bearish{background:#3D0D0D;color:var(--danger)}
 .gallery-signal.neutral{background:var(--purple-card);color:var(--gold)}
-.gallery-desc{font-size:11px;color:var(--text-muted);margin-top:6px;line-height:1.5;text-align:left}
+.gallery-tap-hint{font-size:10px;color:var(--text-dim);margin-top:8px;display:flex;align-items:center;justify-content:center;gap:3px}
 /* modal */
 .gallery-modal{position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:200;display:none;align-items:flex-end;justify-content:center}
 .gallery-modal.open{display:flex}
@@ -685,12 +685,26 @@ function renderGallery() {
     const card = document.createElement('div');
     card.className = `gallery-card ${p.type}`;
     card.onclick = () => openPatternModal(p);
+
+    // Canvas — bigger so candle is clearly visible
     const wrap = document.createElement('div'); wrap.className = 'gallery-canvas-wrap';
-    const canvas = document.createElement('canvas'); canvas.width=100; canvas.height=70; canvas.style.cssText='width:100px;height:70px';
+    const canvas = document.createElement('canvas');
+    canvas.width = 120; canvas.height = 90;
+    canvas.style.cssText = 'width:120px;height:90px';
     wrap.appendChild(canvas);
     card.appendChild(wrap);
-    card.innerHTML += `<div class="gallery-name">${p.name}</div><span class="gallery-signal ${p.type}">${p.signal}</span><div class="gallery-desc">${p.desc.substring(0,65)}...</div>`;
+
+    // Name + signal badge visible immediately
+    const info = document.createElement('div');
+    info.innerHTML = `
+      <div class="gallery-name">${p.name}</div>
+      <span class="gallery-signal ${p.type}">${p.signal}</span>
+      <div class="gallery-tap-hint"><i class="ti ti-info-circle" style="font-size:11px"></i> Tap for details</div>
+    `;
+    card.appendChild(info);
     grid.appendChild(card);
+
+    // Draw after appended so canvas is in DOM
     drawPatternCanvas(canvas, p.ohlc, true);
   });
 }
