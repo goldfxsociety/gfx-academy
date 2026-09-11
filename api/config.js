@@ -134,10 +134,11 @@ export default function handler(req, res) {
   const clientId = process.env.ACADEMY_CLIENT || 'default';
   const config   = CONFIGS[clientId] || CONFIGS['default'];
 
-  // Never expose password
+  // Add hasPassword flag so ib-builder knows without a separate API call
   const safe = { ...config };
   if (safe.ibBuilder) safe.ibBuilder = { ...safe.ibBuilder };
   delete safe.ibBuilder?.password;
+  if (safe.ibBuilder) safe.ibBuilder.hasPassword = !!process.env.IB_PASSWORD;
 
   return res.status(200).json(safe);
 }
