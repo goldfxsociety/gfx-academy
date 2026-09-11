@@ -78,6 +78,12 @@ body{font-family:'Inter',sans-serif;background:var(--purple-deep);color:var(--te
 </head>
 <body>
 
+<!-- LOADING SCREEN -->
+<div id="loading-screen" style="min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px">
+  <div style="font-size:32px">⚡</div>
+  <div style="font-family:'Syne',sans-serif;font-size:16px;color:var(--gold)">Loading...</div>
+</div>
+
 <!-- PASSWORD GATE -->
 <div id="password-gate" style="display:none;min-height:100vh;align-items:center;justify-content:center;padding:24px">
   <div style="background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:16px;padding:28px 24px;width:100%;max-width:360px;text-align:center">
@@ -200,48 +206,58 @@ let pinValue   = '';
 
 async function initBuilder() {
   try {
-    const res  = await fetch('/api/config');
-    CFG = await res.json();
+    // Try to load config from /api/config
+    let base = {};
+    try {
+      const res = await fetch('/api/config');
+      if (res.ok) base = await res.json();
+    } catch(configErr) {
+      console.warn('Config fetch failed — using empty defaults:', configErr);
+    }
 
-    // Apply branding
-    if (CFG.branding) applyBranding(CFG.branding);
+    // Apply branding if available
+    if (base.branding) applyBranding(base.branding);
 
     // Set academy name
     const nameEl = document.getElementById('ib-academy-name');
-    if (nameEl) nameEl.textContent = CFG.name || 'Trading Academy';
+    if (nameEl) nameEl.textContent = base.name || 'Trading Academy';
 
     // Set academy base URL from config
-    ACADEMY_BASE = CFG.links?.academyBase || ACADEMY_BASE;
+    ACADEMY_BASE = base.links?.academyBase
+      || window.location.origin + '/academy';
 
-    // Setup password gate based on config
-    const pwType = CFG.ibBuilder?.passwordType || 'password';
+    // Populate CFG for use in generateLink preview
+    CFG = base;
 
-    // Check if password is required (IB_PASSWORD env var set = requires auth)
+    // Check if password protection is needed
     const needsAuth = await checkNeedsAuth();
 
+    // Hide loading screen
+    document.getElementById('loading-screen').style.display = 'none';
+
     if (!needsAuth) {
-      // No password set — show builder directly
       showBuilder();
       return;
     }
 
     // Show gate
+    const pwType = base.ibBuilder?.passwordType || 'password';
     document.getElementById('password-gate').style.display = 'flex';
 
     if (pwType === 'pin') {
       setupPinGate();
     } else if (pwType === 'both') {
-      // Show both options — password by default, toggle to PIN
       setupBothGate();
     } else {
-      // Default: password
       document.getElementById('gate-password-wrap').style.display = 'block';
       document.getElementById('gate-pin-wrap').style.display = 'none';
       setTimeout(() => document.getElementById('gate-password-input')?.focus(), 100);
     }
 
   } catch(err) {
-    console.warn('Config load failed:', err);
+    console.error('initBuilder error:', err);
+    // Hide loading, show builder anyway — fail open so IB builder still works
+    document.getElementById('loading-screen').style.display = 'none';
     showBuilder();
   }
 }
