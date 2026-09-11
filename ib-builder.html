@@ -78,11 +78,433 @@ body{font-family:'Inter',sans-serif;background:var(--purple-deep);color:var(--te
 </head>
 <body>
 
+<!-- PASSWORD GATE -->
+<div id="password-gate" style="display:none;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px">
+  <div style="background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:16px;padding:28px 24px;width:100%;max-width:360px;text-align:center">
+    <div style="font-size:36px;margin-bottom:12px">🔐</div>
+    <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:6px" id="gate-title">IB Link Builder</div>
+    <div style="font-size:13px;color:var(--text-muted);margin-bottom:20px" id="gate-sub">Enter your password to access the IB Link Builder.</div>
+
+    <!-- Password input (shown based on config) -->
+    <div id="gate-password-wrap">
+      <input type="password" id="gate-password-input" placeholder="Enter password"
+        style="width:100%;background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;padding:12px 14px;color:var(--text-main);font-family:'Inter',sans-serif;font-size:15px;margin-bottom:10px;text-align:center"
+        onkeydown="if(event.key==='Enter') submitPassword()">
+    </div>
+
+    <!-- PIN input (shown based on config) -->
+    <div id="gate-pin-wrap" style="display:none">
+      <div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px" id="pin-boxes"></div>
+    </div>
+
+    <div id="gate-err" style="font-size:12px;color:var(--danger);margin-bottom:10px;display:none">Incorrect. Please try again.</div>
+    <button onclick="submitPassword()"
+      style="width:100%;background:var(--gold);color:#1A0A2E;border:none;border-radius:8px;padding:13px;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer">
+      Unlock →
+    </button>
+  </div>
+</div>
+
+<!-- MAIN BUILDER (hidden until authenticated) -->
+<div id="builder-main" style="display:none">
+
 <div class="header">
-  <div class="logo"><i class="ti ti-award"></i> GFX Trading Academy</div>
+  <div class="logo"><i class="ti ti-award"></i> <span id="ib-academy-name">Trading Academy</span></div>
   <div class="page-title">IB Link Builder</div>
   <p class="page-sub">Generate a personalized academy URL for each sub-IB. They share it with their students — no code changes, no setup needed.</p>
 </div>
+
+<!-- BUILDER FORM -->
+<div class="card">
+  <div class="card-title">Sub-IB Details</div>
+  <div class="card-sub">Fill in their links. Any field left blank falls back to your defaults automatically.</div>
+
+  <div class="field">
+    <label>Sub-IB Name <span style="color:var(--text-dim);font-weight:400">(optional)</span></label>
+    <input type="text" id="lb-name" placeholder="e.g. Maria Santos" maxlength="40" oninput="onFieldChange(this)">
+    <div class="field-hint">Shows a "Referred by Maria Santos" banner on the academy home screen.</div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="field">
+    <label>ACCM Referral Link</label>
+    <input type="url" id="lb-accm" placeholder="https://accm.global/account/register?shareUserSetId=..." oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to your master ACCM link</div>
+  </div>
+
+  <div class="field">
+    <label>Messenger Community Link</label>
+    <input type="url" id="lb-community" placeholder="https://m.me/cm/..." oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to your community link</div>
+  </div>
+
+  <div class="field">
+    <label>Support / Facebook Profile Link</label>
+    <input type="url" id="lb-support" placeholder="https://www.facebook.com/their-profile" oninput="onFieldChange(this)">
+    <div class="default-badge"><i class="ti ti-info-circle" style="font-size:11px"></i> Falls back to your support link</div>
+  </div>
+
+  <div class="err" id="lb-err"><i class="ti ti-alert-circle"></i> Please fill in at least one field before generating.</div>
+  <button class="generate-btn" onclick="generateLink()"><i class="ti ti-link"></i> Generate Academy Link</button>
+
+  <div class="result-card" id="result-card">
+    <div class="result-label"><i class="ti ti-check-circle"></i> Academy link ready</div>
+    <div class="result-url" id="result-url"></div>
+    <div class="short-url-wrap" id="short-url-wrap">
+      <div class="short-url-label"><i class="ti ti-bolt" style="font-size:11px"></i> Shortened link</div>
+      <div class="short-url-row">
+        <span class="short-url-text" id="short-url-text"></span>
+        <button class="short-copy-btn" onclick="copyShortLink()">Copy</button>
+      </div>
+    </div>
+    <div class="short-err" id="short-err"></div>
+    <div class="btn-row">
+      <button class="copy-btn" id="copy-btn" onclick="copyLink()" style="margin-bottom:0"><i class="ti ti-copy"></i> Copy Full Link</button>
+      <button class="shorten-btn" id="shorten-btn" onclick="shortenLink()"><i class="ti ti-bolt"></i> Shorten Link</button>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="preview-label">What students will see</div>
+      <div id="preview-rows"></div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-card">
+  <div class="how-title"><i class="ti ti-info-circle" style="color:var(--gold)"></i> How it works</div>
+  <div class="step"><div class="step-num">1</div><div class="step-text">Fill in the sub-IB details above and click <strong>Generate Academy Link</strong>.</div></div>
+  <div class="step"><div class="step-num">2</div><div class="step-text">Copy the link and send it directly to your sub-IB. That is the only thing they need.</div></div>
+  <div class="step"><div class="step-num">3</div><div class="step-text">When a student opens the link, the academy <strong>auto-configures</strong> with the sub-IB ACCM referral, their Messenger community, and their support contact.</div></div>
+  <div class="step"><div class="step-num">4</div><div class="step-text">If a name was set, students see a <strong>"Referred by [Name]"</strong> banner so they know exactly who to contact for help.</div></div>
+  <div class="step" style="margin-bottom:0"><div class="step-num">5</div><div class="step-text">Any blank field falls back to your defaults — the academy always works even with a partial link.</div></div>
+  <div class="params-card">
+    <div class="params-title">URL Parameters Reference</div>
+    <div class="param-row"><span class="param-key">accm</span><span class="param-desc">Sub-IB ACCM referral link</span></div>
+    <div class="param-row"><span class="param-key">community</span><span class="param-desc">Messenger community link</span></div>
+    <div class="param-row"><span class="param-key">support</span><span class="param-desc">FB profile or support link</span></div>
+    <div class="param-row"><span class="param-key">ib</span><span class="param-desc">Sub-IB name (shows banner)</span></div>
+  </div>
+</div>
+
+</div><!-- end builder-main -->
+
+<script>
+// ── CONFIG + PASSWORD GATE ────────────────────────────────────────────────────
+let CFG = {};
+let ACADEMY_BASE = window.location.origin + '/academy';
+let builtLink = '';
+let shortLink  = '';
+let pinValue   = '';
+
+async function initBuilder() {
+  try {
+    const res  = await fetch('/api/config');
+    CFG = await res.json();
+
+    // Apply branding
+    if (CFG.branding) applyBranding(CFG.branding);
+
+    // Set academy name
+    const nameEl = document.getElementById('ib-academy-name');
+    if (nameEl) nameEl.textContent = CFG.name || 'Trading Academy';
+
+    // Set academy base URL from config
+    ACADEMY_BASE = CFG.links?.academyBase || ACADEMY_BASE;
+
+    // Setup password gate based on config
+    const pwType = CFG.ibBuilder?.passwordType || 'password';
+
+    // Check if password is required (IB_PASSWORD env var set = requires auth)
+    const needsAuth = await checkNeedsAuth();
+
+    if (!needsAuth) {
+      // No password set — show builder directly
+      showBuilder();
+      return;
+    }
+
+    // Show gate
+    document.getElementById('password-gate').style.display = 'flex';
+
+    if (pwType === 'pin') {
+      setupPinGate();
+    } else if (pwType === 'both') {
+      // Show both options — password by default, toggle to PIN
+      setupBothGate();
+    } else {
+      // Default: password
+      document.getElementById('gate-password-wrap').style.display = 'block';
+      document.getElementById('gate-pin-wrap').style.display = 'none';
+      setTimeout(() => document.getElementById('gate-password-input')?.focus(), 100);
+    }
+
+  } catch(err) {
+    console.warn('Config load failed:', err);
+    showBuilder();
+  }
+}
+
+async function checkNeedsAuth() {
+  // Quick check — if verify-password returns ok with empty string, no auth needed
+  try {
+    const res = await fetch('/api/verify-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: '' })
+    });
+    const data = await res.json();
+    return !data.ok; // if empty password works = no auth needed
+  } catch(e) {
+    return false;
+  }
+}
+
+function setupPinGate() {
+  document.getElementById('gate-password-wrap').style.display = 'none';
+  document.getElementById('gate-pin-wrap').style.display = 'block';
+  document.getElementById('gate-sub').textContent = 'Enter your PIN to access the IB Link Builder.';
+
+  const pinBoxes = document.getElementById('pin-boxes');
+  pinBoxes.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const box = document.createElement('div');
+    box.style.cssText = `width:40px;height:48px;background:var(--purple-card);border:2px solid var(--purple-border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--text-main);cursor:text`;
+    box.id = 'pin-' + i;
+    box.textContent = '';
+    pinBoxes.appendChild(box);
+  }
+
+  // Hidden input for actual typing
+  const hidden = document.createElement('input');
+  hidden.type = 'tel';
+  hidden.maxLength = 6;
+  hidden.style.cssText = 'position:absolute;opacity:0;width:1px;height:1px';
+  hidden.id = 'pin-hidden';
+  hidden.addEventListener('input', e => {
+    pinValue = e.target.value.replace(/\D/g, '').substring(0, 6);
+    for (let i = 0; i < 6; i++) {
+      const box = document.getElementById('pin-' + i);
+      box.textContent = pinValue[i] ? '●' : '';
+      box.style.borderColor = pinValue[i] ? 'var(--gold)' : 'var(--purple-border)';
+    }
+    if (pinValue.length === 6) submitPassword();
+  });
+  document.body.appendChild(hidden);
+  pinBoxes.addEventListener('click', () => hidden.focus());
+  setTimeout(() => hidden.focus(), 100);
+}
+
+function setupBothGate() {
+  document.getElementById('gate-password-wrap').style.display = 'block';
+  document.getElementById('gate-pin-wrap').style.display = 'none';
+  // Add toggle link
+  const toggle = document.createElement('div');
+  toggle.style.cssText = 'font-size:12px;color:var(--text-dim);margin-top:8px;cursor:pointer';
+  toggle.textContent = 'Switch to PIN';
+  toggle.onclick = () => {
+    const pwWrap  = document.getElementById('gate-password-wrap');
+    const pinWrap = document.getElementById('gate-pin-wrap');
+    if (pinWrap.style.display === 'none') {
+      pwWrap.style.display  = 'none';
+      pinWrap.style.display = 'block';
+      toggle.textContent = 'Switch to Password';
+      setupPinGate();
+    } else {
+      pwWrap.style.display  = 'block';
+      pinWrap.style.display = 'none';
+      toggle.textContent = 'Switch to PIN';
+    }
+  };
+  document.getElementById('gate-password-wrap').after(toggle);
+  setTimeout(() => document.getElementById('gate-password-input')?.focus(), 100);
+}
+
+async function submitPassword() {
+  const pwType  = CFG.ibBuilder?.passwordType || 'password';
+  const isPin   = pwType === 'pin' || (pwType === 'both' && document.getElementById('gate-pin-wrap').style.display !== 'none');
+  const entered = isPin
+    ? pinValue
+    : (document.getElementById('gate-password-input')?.value || '');
+
+  if (!entered) return;
+
+  const errEl = document.getElementById('gate-err');
+  errEl.style.display = 'none';
+
+  try {
+    const res  = await fetch('/api/verify-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: entered })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      document.getElementById('password-gate').style.display = 'none';
+      showBuilder();
+    } else {
+      errEl.style.display = 'block';
+      if (isPin) {
+        pinValue = '';
+        const hidden = document.getElementById('pin-hidden');
+        if (hidden) hidden.value = '';
+        for (let i = 0; i < 6; i++) {
+          const box = document.getElementById('pin-' + i);
+          if (box) { box.textContent = ''; box.style.borderColor = 'var(--danger)'; }
+        }
+        setTimeout(() => {
+          for (let i = 0; i < 6; i++) {
+            const box = document.getElementById('pin-' + i);
+            if (box) box.style.borderColor = 'var(--purple-border)';
+          }
+        }, 1000);
+      } else {
+        const input = document.getElementById('gate-password-input');
+        if (input) { input.value = ''; input.focus(); }
+      }
+    }
+  } catch(err) {
+    errEl.textContent = 'Connection error. Please try again.';
+    errEl.style.display = 'block';
+  }
+}
+
+function showBuilder() {
+  document.getElementById('password-gate').style.display = 'none';
+  document.getElementById('builder-main').style.display  = 'block';
+}
+
+function applyBranding(b) {
+  if (!b) return;
+  const root = document.documentElement;
+  if (b.primaryColor)  root.style.setProperty('--gold',          b.primaryColor);
+  if (b.primaryColor)  root.style.setProperty('--gold-light',    b.primaryColor);
+  if (b.accentColor)   root.style.setProperty('--purple-mid',    b.accentColor);
+  if (b.cardColor)     root.style.setProperty('--purple-card',   b.cardColor);
+  if (b.borderColor)   root.style.setProperty('--purple-border', b.borderColor);
+  if (b.bgColor)       root.style.setProperty('--purple-deep',   b.bgColor);
+  if (b.textMain)      root.style.setProperty('--text-main',     b.textMain);
+  if (b.textMuted)     root.style.setProperty('--text-muted',    b.textMuted);
+}
+
+// ── LINK BUILDER ──────────────────────────────────────────────────────────────
+function onFieldChange(input) {
+  input.classList.toggle('has-value', !!input.value.trim());
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('lb-err').style.display = 'none';
+  builtLink = ''; shortLink = '';
+}
+
+function generateLink() {
+  const name      = document.getElementById('lb-name').value.trim();
+  const accm      = document.getElementById('lb-accm').value.trim();
+  const community = document.getElementById('lb-community').value.trim();
+  const support   = document.getElementById('lb-support').value.trim();
+  const errEl     = document.getElementById('lb-err');
+
+  if (!name && !accm && !community && !support) { errEl.style.display = 'flex'; return; }
+  errEl.style.display = 'none';
+
+  const p = new URLSearchParams();
+  if (accm)      p.set('accm', accm);
+  if (community) p.set('community', community);
+  if (support)   p.set('support', support);
+  if (name)      p.set('ib', name);
+
+  builtLink = ACADEMY_BASE + (p.toString() ? '?' + p.toString() : '');
+
+  document.getElementById('result-url').textContent = builtLink;
+  const rc = document.getElementById('result-card');
+  rc.style.display = 'block';
+
+  // Reset buttons and short URL
+  const copyBtn    = document.getElementById('copy-btn');
+  const shortenBtn = document.getElementById('shorten-btn');
+  copyBtn.innerHTML    = '<i class="ti ti-copy"></i> Copy Full Link';
+  copyBtn.style.background = 'var(--gold)'; copyBtn.style.color = '#1A0A2E';
+  shortenBtn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link';
+  shortenBtn.disabled  = false; shortenBtn.style.borderColor = ''; shortenBtn.style.color = '';
+  document.getElementById('short-url-wrap').style.display = 'none';
+  document.getElementById('short-err').style.display = 'none';
+  shortLink = '';
+
+  // Preview rows
+  const defaults = CFG.links || {};
+  const fields = [
+    { icon:'ti-id-badge',        label:'IB Banner',       value: name      || null, fallback: 'No banner (name not set)' },
+    { icon:'ti-external-link',   label:'ACCM Link',        value: accm      || null, fallback: defaults.accm || '(your default)' },
+    { icon:'ti-brand-messenger', label:'Community',         value: community || null, fallback: defaults.community || '(your default)' },
+    { icon:'ti-user',            label:'Support Contact',  value: support   || null, fallback: defaults.support || '(your default)' },
+  ];
+  document.getElementById('preview-rows').innerHTML = fields.map(f => {
+    const isCustom = !!f.value;
+    const display  = f.value || f.fallback;
+    const isLink   = display.startsWith('http');
+    return `<div class="preview-row">
+      <div class="preview-icon"><i class="ti ${f.icon}"></i></div>
+      <div class="preview-info">
+        <div class="preview-info-label">${f.label} <span style="font-size:9px;color:${isCustom?'var(--gold)':'var(--text-dim)'}">${isCustom?'CUSTOM':'DEFAULT'}</span></div>
+        <div class="preview-info-value ${isCustom?'custom':'default-val'}">${isLink?`<a href="${display}" target="_blank" style="color:inherit;text-decoration:none">${display}</a>`:display}</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  rc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function copyLink() {
+  if (!builtLink) return;
+  try { navigator.clipboard.writeText(builtLink); } catch(e) {
+    const ta = document.createElement('textarea'); ta.value = builtLink;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  const btn = document.getElementById('copy-btn');
+  btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
+  btn.style.background = 'var(--success)'; btn.style.color = '#1A0A2E';
+  setTimeout(() => { btn.innerHTML = '<i class="ti ti-copy"></i> Copy Full Link'; btn.style.background = 'var(--gold)'; btn.style.color = '#1A0A2E'; }, 2500);
+}
+
+async function shortenLink() {
+  if (!builtLink) return;
+  if (shortLink) { document.getElementById('short-url-wrap').style.display = 'block'; return; }
+  const btn    = document.getElementById('shorten-btn');
+  const errEl  = document.getElementById('short-err');
+  btn.innerHTML = '<i class="ti ti-loader-2"></i> Shortening...';
+  btn.disabled  = true; errEl.style.display = 'none';
+  try {
+    const res = await fetch('/api/shorten', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: builtLink }),
+    });
+    if (!res.ok) { const { error } = await res.json().catch(()=>({})); throw new Error(error || 'Server error'); }
+    const { short, reused } = await res.json();
+    shortLink = short;
+    document.getElementById('short-url-text').textContent = shortLink;
+    document.getElementById('short-url-wrap').style.display = 'block';
+    btn.innerHTML = `<i class="ti ti-check"></i> ${reused ? 'Already shortened' : 'Shortened!'}`;
+    btn.style.borderColor = 'var(--success)'; btn.style.color = 'var(--success)'; btn.disabled = false;
+  } catch(err) {
+    btn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link'; btn.disabled = false;
+    errEl.textContent = 'Could not shorten: ' + (err.message || 'unknown error');
+    errEl.style.display = 'block';
+  }
+}
+
+function copyShortLink() {
+  if (!shortLink) return;
+  try { navigator.clipboard.writeText(shortLink); } catch(e) {
+    const ta = document.createElement('textarea'); ta.value = shortLink;
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
+  }
+  const btn = document.querySelector('.short-copy-btn');
+  const orig = btn.textContent; btn.textContent = 'Copied!';
+  setTimeout(() => { btn.textContent = orig; }, 2000);
+}
+
+// ── INIT ──────────────────────────────────────────────────────────────────────
+initBuilder();
 
 <!-- BUILDER FORM -->
 <div class="card">
@@ -163,179 +585,6 @@ body{font-family:'Inter',sans-serif;background:var(--purple-deep);color:var(--te
     <div class="param-row"><span class="param-key">support</span><span class="param-desc">FB profile or support link</span></div>
     <div class="param-row"><span class="param-key">ib</span><span class="param-desc">Sub-IB name (shows banner)</span></div>
   </div>
-</div>
 
-<script>
-// ── YOUR DEFAULTS ─────────────────────────────────────────────────────────────
-const DEFAULTS = {
-  accm:      'https://accm.global/account/register?shareUserSetId=3a59d46d63f04393b',
-  community: 'https://m.me/cm/DT8JPfkzsMUWMvYy/',
-  support:   'https://www.facebook.com/benedictglvz',
-};
-
-// ── AUTO-DETECT ACADEMY URL ───────────────────────────────────────────────────
-// Works whether hosted at /academy, /academy.html, or any path
-const ACADEMY_BASE = (() => {
-  const url = new URL(window.location.href);
-  // Replace ib-builder with academy in the path
-  const path = url.pathname.replace(/ib-builder(\.html)?$/, 'academy');
-  return url.origin + path;
-})();
-
-let builtLink = '';
-let shortLink  = '';
-
-function onFieldChange(input) {
-  if (input.value.trim()) {
-    input.classList.add('has-value');
-  } else {
-    input.classList.remove('has-value');
-  }
-  // Hide result when inputs change
-  document.getElementById('result-card').style.display = 'none';
-  document.getElementById('lb-err').style.display = 'none';
-  builtLink = '';
-}
-
-function generateLink() {
-  const name      = document.getElementById('lb-name').value.trim();
-  const accm      = document.getElementById('lb-accm').value.trim();
-  const community = document.getElementById('lb-community').value.trim();
-  const support   = document.getElementById('lb-support').value.trim();
-  const errEl     = document.getElementById('lb-err');
-
-  if (!name && !accm && !community && !support) {
-    errEl.style.display = 'flex'; return;
-  }
-  errEl.style.display = 'none';
-
-  const p = new URLSearchParams();
-  if (accm)      p.set('accm', accm);
-  if (community) p.set('community', community);
-  if (support)   p.set('support', support);
-  if (name)      p.set('ib', name);
-
-  builtLink = ACADEMY_BASE + (p.toString() ? '?' + p.toString() : '');
-
-  // Show result
-  document.getElementById('result-url').textContent = builtLink;
-  const rc = document.getElementById('result-card');
-  rc.style.display = 'block';
-
-  // Reset all buttons and short URL area
-  const copyBtn = document.getElementById('copy-btn');
-  copyBtn.innerHTML = '<i class="ti ti-copy"></i> Copy Full Link';
-  copyBtn.style.background = 'var(--gold)';
-  copyBtn.style.color = '#1A0A2E';
-  const shortenBtn = document.getElementById('shorten-btn');
-  shortenBtn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link';
-  shortenBtn.disabled = false;
-  shortenBtn.style.borderColor = '';
-  shortenBtn.style.color = '';
-  document.getElementById('short-url-wrap').style.display = 'none';
-  document.getElementById('short-url-text').textContent = '';
-  document.getElementById('short-err').style.display = 'none';
-  shortLink = '';
-
-  // Build preview
-  const fields = [
-    { icon:'ti-id-badge',       label:'IB Banner',        value: name      || null, fallback: 'No banner (name not set)' },
-    { icon:'ti-external-link',  label:'ACCM Link',         value: accm      || null, fallback: DEFAULTS.accm },
-    { icon:'ti-brand-messenger',label:'Community',          value: community || null, fallback: DEFAULTS.community },
-    { icon:'ti-user',           label:'Support Contact',   value: support   || null, fallback: DEFAULTS.support },
-  ];
-
-  document.getElementById('preview-rows').innerHTML = fields.map(f => {
-    const isCustom = !!f.value;
-    const display  = f.value || f.fallback;
-    const isLink   = display.startsWith('http');
-    return `<div class="preview-row">
-      <div class="preview-icon"><i class="ti ${f.icon}"></i></div>
-      <div class="preview-info">
-        <div class="preview-info-label">${f.label} ${isCustom ? '<span style="color:var(--gold);font-size:9px">CUSTOM</span>' : '<span style="color:var(--text-dim);font-size:9px">DEFAULT</span>'}</div>
-        <div class="preview-info-value ${isCustom?'custom':'default-val'}">${isLink ? `<a href="${display}" target="_blank" style="color:inherit;text-decoration:none">${display}</a>` : display}</div>
-      </div>
-    </div>`;
-  }).join('');
-
-  rc.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-
-function copyLink() {
-  if (!builtLink) return;
-  try { navigator.clipboard.writeText(builtLink); } catch(e) {
-    const ta = document.createElement('textarea'); ta.value = builtLink;
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-  }
-  const btn = document.getElementById('copy-btn');
-  btn.innerHTML = '<i class="ti ti-check"></i> Copied!';
-  btn.style.background = 'var(--success)';
-  btn.style.color = '#1A0A2E';
-  setTimeout(() => {
-    btn.innerHTML = '<i class="ti ti-copy"></i> Copy Full Link';
-    btn.style.background = 'var(--gold)';
-    btn.style.color = '#1A0A2E';
-  }, 2500);
-}
-
-async function shortenLink() {
-  if (!builtLink) return;
-
-  // Already shortened this session — just re-show it
-  if (shortLink) {
-    document.getElementById('short-url-wrap').style.display = 'block';
-    return;
-  }
-
-  const btn    = document.getElementById('shorten-btn');
-  const errEl  = document.getElementById('short-err');
-  btn.innerHTML = '<i class="ti ti-loader-2"></i> Shortening...';
-  btn.disabled  = true;
-  errEl.style.display = 'none';
-
-  try {
-    const res = await fetch('/api/shorten', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ url: builtLink }),
-    });
-
-    if (!res.ok) {
-      const { error } = await res.json().catch(() => ({}));
-      throw new Error(error || 'Server error ' + res.status);
-    }
-
-    const { short, reused } = await res.json();
-    shortLink = short;
-
-    document.getElementById('short-url-text').textContent = shortLink;
-    document.getElementById('short-url-wrap').style.display = 'block';
-
-    btn.innerHTML = `<i class="ti ti-check"></i> ${reused ? 'Already shortened' : 'Shortened!'}`;
-    btn.style.borderColor = 'var(--success)';
-    btn.style.color       = 'var(--success)';
-    btn.disabled = false;
-
-  } catch (err) {
-    console.error('Shorten error:', err);
-    btn.innerHTML = '<i class="ti ti-bolt"></i> Shorten Link';
-    btn.disabled  = false;
-    errEl.textContent = 'Could not shorten: ' + (err.message || 'unknown error');
-    errEl.style.display = 'block';
-  }
-}
-
-function copyShortLink() {
-  if (!shortLink) return;
-  try { navigator.clipboard.writeText(shortLink); } catch(e) {
-    const ta = document.createElement('textarea'); ta.value = shortLink;
-    document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta);
-  }
-  const btn = document.querySelector('.short-copy-btn');
-  const orig = btn.textContent;
-  btn.textContent = 'Copied!';
-  setTimeout(() => { btn.textContent = orig; }, 2000);
-}
-</script>
 </body>
 </html>

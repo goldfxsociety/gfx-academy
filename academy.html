@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>GFX Trading Academy</title>
-<meta name="description" content="Learn Gold (XAUUSD) trading from zero. Free step-by-step lessons, quizzes, and badges.">
+<title id="page-title">Trading Academy</title>
+<meta name="description" id="page-desc" content="Learn Gold trading from zero.">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -208,7 +208,7 @@ canvas.candle-canvas{background:var(--purple-card);border:1px solid var(--purple
 <div id="app">
 <div class="screen active" id="screen-home">
   <div class="home-header">
-    <div class="academy-badge"><i class="ti ti-award"></i> GFX Trading Academy</div>
+    <div class="academy-badge"><i class="ti ti-award"></i> <span class="academy-name-text">Trading Academy</span></div>
     <h1 class="home-title">Master <span>Gold Trading</span><br>from Zero</h1>
     <p class="home-sub">Step-by-step school for XAUUSD traders. Free lessons, quizzes, and badges.</p>
   </div>
@@ -462,40 +462,185 @@ canvas.candle-canvas{background:var(--purple-card);border:1px solid var(--purple
 </nav>
 
 <script>
-// ── DEFAULTS (your master links) ──────────────────────────────────────────────
-const DEFAULTS = {
-  accm:      'https://accm.global/account/register?shareUserSetId=3a59d46d63f04393b',
-  community: 'https://m.me/cm/DT8JPfkzsMUWMvYy/',
-  support:   'https://www.facebook.com/benedictglvz',
-  ib:        ''
-};
+// ── CONFIG LOADER ─────────────────────────────────────────────────────────────
+// All branding, links, and modules come from /api/config (set per Vercel project)
+// URL params (?accm=&ib=&community=&support=) still work for sub-IB links
 
-// ── READ URL PARAMS ───────────────────────────────────────────────────────────
-const _p = new URLSearchParams(window.location.search);
-const CFG = {
-  accm:      _p.get('accm')      || DEFAULTS.accm,
-  community: _p.get('community') || DEFAULTS.community,
-  support:   _p.get('support')   || DEFAULTS.support,
-  ib:        _p.get('ib')        || DEFAULTS.ib,
-};
+let CFG = {};
+let FL  = [];
 
-// Apply dynamic links
-document.getElementById('home-accm-link').href    = CFG.accm;
-document.getElementById('progress-accm-link').href = CFG.accm;
+async function loadConfig() {
+  try {
+    const res  = await fetch('/api/config');
+    const base = await res.json();
 
-// IB banner
-if (CFG.ib) {
-  document.getElementById('ib-banner-home').innerHTML =
-    `<div class="ib-banner"><div class="ib-avatar">👤</div><div class="ib-text">Referred by <strong>${CFG.ib}</strong><br>Your trades will be linked to their ACCM referral.</div></div>`;
+    // URL params override config links (for sub-IB generated links)
+    const p = new URLSearchParams(window.location.search);
+    CFG = {
+      name:      base.name      || 'Trading Academy',
+      shortName: base.shortName || 'Academy',
+      logo:      base.logo      || 'GFX',
+      accm:      p.get('accm')      || base.links?.accm      || '',
+      community: p.get('community') || base.links?.community || '',
+      support:   p.get('support')   || base.links?.support   || '',
+      wikifx:    base.links?.wikifx || '',
+      academyBase: base.links?.academyBase || window.location.origin + '/academy',
+      ib:        p.get('ib') || '',
+      branding:  base.branding  || {},
+      modules:   base.modules   || {},
+      customTabs:base.customTabs|| [],
+      footer:    base.footer    || {},
+    };
+
+    // Apply branding CSS variables
+    applyBranding(CFG.branding);
+
+    // Apply dynamic page title
+    document.getElementById('page-title').textContent = CFG.name;
+    document.querySelectorAll('.academy-name-text').forEach(el => el.textContent = CFG.name);
+    document.querySelectorAll('.academy-logo-text').forEach(el => el.textContent = CFG.logo);
+
+    // Apply ACCM links
+    const homeLink = document.getElementById('home-accm-link');
+    const progLink = document.getElementById('progress-accm-link');
+    if (homeLink) homeLink.href = CFG.accm;
+    if (progLink) progLink.href = CFG.accm;
+
+    // IB banner
+    if (CFG.ib) {
+      const banner = document.getElementById('ib-banner-home');
+      if (banner) banner.innerHTML = `<div class="ib-banner"><div class="ib-avatar">👤</div><div class="ib-text">Referred by <strong>${CFG.ib}</strong><br>Your trades will be linked to their ACCM referral.</div></div>`;
+    }
+
+    // Footer links
+    FL = [
+      { icon: 'ti-brand-messenger', label: 'Join Community',   href: CFG.community },
+      { icon: 'ti-user',            label: 'Contact Support',   href: CFG.support   },
+      { icon: 'ti-external-link',   label: 'Open ACCM',         href: CFG.accm      },
+    ];
+    if (CFG.wikifx && CFG.modules.wikifxBadge !== false) {
+      FL.push({ icon: 'ti-shield-check', label: 'Verify on WikiFX', href: CFG.wikifx });
+    }
+
+    // Footer copyright
+    const footerCopies = document.querySelectorAll('.footer-copy');
+    footerCopies.forEach(el => {
+      el.textContent = (CFG.footer.copyright || '') + '\n' + (CFG.footer.disclaimer || '');
+    });
+
+    // Build custom tabs in nav + screens
+    buildCustomTabs(CFG.customTabs);
+
+    // Hide modules that are disabled
+    applyModules(CFG.modules);
+
+    // WikiFX badge visibility
+    document.querySelectorAll('.wikifx-badge').forEach(el => {
+      el.style.display = CFG.modules.wikifxBadge !== false ? 'flex' : 'none';
+    });
+
+  } catch (err) {
+    console.warn('Config load failed, using URL params fallback:', err);
+    // Graceful fallback — still works with URL params
+    const p = new URLSearchParams(window.location.search);
+    CFG = {
+      name: 'Trading Academy', shortName: 'Academy', logo: 'GFX',
+      accm: p.get('accm') || '', community: p.get('community') || '',
+      support: p.get('support') || '', wikifx: '', ib: p.get('ib') || '',
+      branding: {}, modules: {}, customTabs: [], footer: {},
+      academyBase: window.location.origin + '/academy',
+    };
+    FL = [
+      { icon: 'ti-brand-messenger', label: 'Join Community', href: CFG.community },
+      { icon: 'ti-user',            label: 'Contact Support', href: CFG.support   },
+      { icon: 'ti-external-link',   label: 'Open ACCM',       href: CFG.accm      },
+    ];
+  }
+
+  // Init app after config loaded
+  renderGradePath();
+  renderContinueCard();
+  renderFooters();
 }
 
-// Footer
-const FL = [
-  { icon: 'ti-brand-messenger', label: 'Join Community', href: CFG.community },
-  { icon: 'ti-user',            label: 'Contact Support', href: CFG.support   },
-  { icon: 'ti-external-link',   label: 'Open ACCM',       href: CFG.accm      },
-  { icon: 'ti-shield-check',    label: 'Verify on WikiFX', href: 'https://www.wikifx.com/fil/dealer/3052942299.html' },
-];
+function applyBranding(b) {
+  if (!b || Object.keys(b).length === 0) return;
+  const root = document.documentElement;
+  if (b.primaryColor)  root.style.setProperty('--gold',          b.primaryColor);
+  if (b.primaryColor)  root.style.setProperty('--gold-light',    b.primaryColor);
+  if (b.primaryColor)  root.style.setProperty('--gold-dim',      b.primaryColor + '88');
+  if (b.accentColor)   root.style.setProperty('--purple-mid',    b.accentColor);
+  if (b.cardColor)     root.style.setProperty('--purple-card',   b.cardColor);
+  if (b.borderColor)   root.style.setProperty('--purple-border', b.borderColor);
+  if (b.bgColor)       root.style.setProperty('--purple-deep',   b.bgColor);
+  if (b.textMain)      root.style.setProperty('--text-main',     b.textMain);
+  if (b.textMuted)     root.style.setProperty('--text-muted',    b.textMuted);
+}
+
+function applyModules(modules) {
+  if (!modules) return;
+  // Hide gallery tab if disabled
+  const navGallery = document.getElementById('nav-gallery');
+  const screenGallery = document.getElementById('screen-gallery');
+  if (modules.candlestickGallery === false) {
+    if (navGallery) navGallery.style.display = 'none';
+    if (screenGallery) screenGallery.style.display = 'none';
+  }
+  // Hide tools tab if disabled
+  const navTools = document.getElementById('nav-tools');
+  const screenTools = document.getElementById('screen-tools');
+  if (modules.tools === false) {
+    if (navTools) navTools.style.display = 'none';
+    if (screenTools) screenTools.style.display = 'none';
+  }
+  // Hide certificate if disabled
+  if (modules.certificate === false) {
+    document.querySelectorAll('#cert-cta-wrap').forEach(el => el.style.display = 'none');
+  }
+  // Hide time estimates if disabled
+  if (modules.lessonTimeEstimates === false) {
+    document.querySelectorAll('.lesson-time').forEach(el => el.style.display = 'none');
+  }
+}
+
+function buildCustomTabs(tabs) {
+  if (!tabs || tabs.length === 0) return;
+  const nav = document.querySelector('.bottom-nav');
+  const app = document.getElementById('app');
+
+  tabs.forEach(tab => {
+    // Add nav button
+    const btn = document.createElement('button');
+    btn.className = 'nav-btn';
+    btn.id = 'nav-' + tab.id;
+    btn.innerHTML = `<i class="ti ${tab.icon}"></i>${tab.label}`;
+    btn.onclick = () => showScreen(tab.id);
+    nav.appendChild(btn);
+
+    // Add screen
+    const screen = document.createElement('div');
+    screen.className = 'screen';
+    screen.id = 'screen-' + tab.id;
+
+    let content = '';
+    if (tab.type === 'iframe') {
+      content = `<button class="back-btn" onclick="showScreen('home')"><i class="ti ti-arrow-left"></i> Back</button>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:12px">${tab.label}</div>
+        <iframe src="${tab.src}" style="width:100%;height:70vh;border:none;border-radius:12px;background:var(--purple-mid)"></iframe>`;
+    } else if (tab.type === 'page') {
+      content = `<button class="back-btn" onclick="showScreen('home')"><i class="ti ti-arrow-left"></i> Back</button>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:12px">${tab.label}</div>
+        ${tab.content || ''}`;
+    } else if (tab.type === 'video') {
+      content = `<button class="back-btn" onclick="showScreen('home')"><i class="ti ti-arrow-left"></i> Back</button>
+        <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:700;color:var(--gold);margin-bottom:12px">${tab.label}</div>
+        <iframe src="${tab.src}" style="width:100%;aspect-ratio:16/9;border:none;border-radius:12px" allowfullscreen></iframe>`;
+    }
+
+    screen.innerHTML = content + `<div class="footer"><div class="footer-links" id="fl-${tab.id}"></div></div>`;
+    app.insertBefore(screen, app.lastElementChild);
+  });
+}
 
 // ── QUIZ FEEDBACK ─────────────────────────────────────────────────────────────
 const QUIZ_FB = {
@@ -600,7 +745,10 @@ function showScreen(name) {
 }
 
 function renderFooters() {
-  ['fl-home','fl-lessons','fl-progress','fl-cert','fl-gallery','fl-tools'].forEach(id => {
+  const allFooterIds = ['fl-home','fl-lessons','fl-progress','fl-cert','fl-gallery','fl-tools'];
+  // Also include any custom tab footer slots
+  if (CFG.customTabs) CFG.customTabs.forEach(t => allFooterIds.push('fl-' + t.id));
+  allFooterIds.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.innerHTML = FL.map(l =>
       `<a class="footer-link" href="${l.href}" target="_blank"><i class="ti ${l.icon}"></i> ${l.label}</a>`
@@ -901,9 +1049,7 @@ function copyShareText(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────────────────
-renderGradePath();
-renderContinueCard();
-renderFooters();
+loadConfig(); // loads config from /api/config, then renders everything
 </script>
 </body>
 </html>

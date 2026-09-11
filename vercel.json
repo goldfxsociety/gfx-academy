@@ -1,9 +1,12 @@
 {
   "rewrites": [
-    { "source": "/academy",      "destination": "/academy.html"    },
-    { "source": "/ib-builder",   "destination": "/ib-builder.html" },
-    { "source": "/api/shorten",  "destination": "/api/shorten.js"  },
-    { "source": "/api/debug",    "destination": "/api/debug.js"    },
-    { "source": "/r/:code",      "destination": "/api/redirect.js" }
+    { "source": "/academy",           "destination": "/academy.html"        },
+    { "source": "/ib-builder",        "destination": "/ib-builder.html"     },
+    { "source": "/api/shorten",       "destination": "/api/shorten.js"      },
+    { "source": "/api/redirect",      "destination": "/api/redirect.js"     },
+    { "source": "/api/config",        "destination": "/api/config.js"       },
+    { "source": "/api/verify-password","destination": "/api/verify-password.js"},
+    { "source": "/api/debug",         "destination": "/api/debug.js"        },
+    { "source": "/r/:code",           "destination": "/api/redirect.js"     }
   ]
 }

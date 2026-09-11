@@ -1,0 +1,59 @@
+{
+  "id": "client-maria",
+  "name": "Maria Trading Academy",
+  "shortName": "MTA",
+  "logo": "MTA",
+
+  "branding": {
+    "primaryColor": "#E8A020",
+    "accentColor": "#1B2A4E",
+    "cardColor": "#243560",
+    "borderColor": "#3A5090",
+    "bgColor": "#0A1020",
+    "textMain": "#F0F5FF",
+    "textMuted": "#B4C5D4"
+  },
+
+  "links": {
+    "accm": "https://accm.global/account/register?shareUserSetId=MARIA_ID_HERE",
+    "community": "https://m.me/cm/MARIA_MESSENGER_HERE",
+    "support": "https://www.facebook.com/maria-profile-here",
+    "wikifx": "https://www.wikifx.com/fil/dealer/3052942299.html",
+    "academyBase": "https://maria-trading-academy.vercel.app/academy"
+  },
+
+  "ibBuilder": {
+    "passwordType": "pin",
+    "note": "PIN is set via IB_PASSWORD environment variable in Vercel"
+  },
+
+  "modules": {
+    "candlestickGallery": true,
+    "tools": true,
+    "ibBuilder": true,
+    "certificate": true,
+    "wikifxBadge": true,
+    "continueCard": true,
+    "lessonTimeEstimates": true
+  },
+
+  "customTabs": [
+    {
+      "id": "signals",
+      "label": "Signals",
+      "icon": "ti-antenna",
+      "type": "iframe",
+      "src": "https://maria-signals.com/embed"
+    }
+  ],
+
+  "lessons": {
+    "useDefault": true,
+    "extraLessons": []
+  },
+
+  "footer": {
+    "copyright": "© 2026 Maria Trading Academy",
+    "disclaimer": "Trading involves risk. Past performance is not indicative of future results."
+  }
+}
