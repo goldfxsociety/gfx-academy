@@ -206,44 +206,32 @@ let pinValue   = '';
 
 async function initBuilder() {
   try {
-    // Try to load config from /api/config
-    let base = {};
-    try {
-      const res = await fetch('/api/config');
-      if (res.ok) base = await res.json();
-    } catch(configErr) {
-      console.warn('Config fetch failed — using empty defaults:', configErr);
-    }
+    // Single API call — config includes hasPassword flag
+    const res  = await fetch('/api/config');
+    const base = res.ok ? await res.json() : {};
 
-    // Apply branding if available
+    // Apply branding
     if (base.branding) applyBranding(base.branding);
 
-    // Set academy name
+    // Set name + academy base URL
     const nameEl = document.getElementById('ib-academy-name');
     if (nameEl) nameEl.textContent = base.name || 'Trading Academy';
-
-    // Set academy base URL from config
-    ACADEMY_BASE = base.links?.academyBase
-      || window.location.origin + '/academy';
-
-    // Populate CFG for use in generateLink preview
+    ACADEMY_BASE = base.links?.academyBase || window.location.origin + '/academy';
     CFG = base;
 
-    // Check if password protection is needed
-    const needsAuth = await checkNeedsAuth();
-
-    // Hide loading screen
+    // Hide loading
     document.getElementById('loading-screen').style.display = 'none';
+
+    // Show password gate only if IB_PASSWORD is set in Vercel env
+    const needsAuth  = base.ibBuilder?.hasPassword === true;
+    const pwType     = base.ibBuilder?.passwordType || 'password';
 
     if (!needsAuth) {
       showBuilder();
       return;
     }
 
-    // Show gate
-    const pwType = base.ibBuilder?.passwordType || 'password';
     document.getElementById('password-gate').style.display = 'flex';
-
     if (pwType === 'pin') {
       setupPinGate();
     } else if (pwType === 'both') {
@@ -256,24 +244,8 @@ async function initBuilder() {
 
   } catch(err) {
     console.error('initBuilder error:', err);
-    // Hide loading, show builder anyway — fail open so IB builder still works
     document.getElementById('loading-screen').style.display = 'none';
-    showBuilder();
-  }
-}
-
-async function checkNeedsAuth() {
-  // Quick check — if verify-password returns ok with empty string, no auth needed
-  try {
-    const res = await fetch('/api/verify-password', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: '' })
-    });
-    const data = await res.json();
-    return !data.ok; // if empty password works = no auth needed
-  } catch(e) {
-    return false;
+    showBuilder(); // fail open
   }
 }
 
