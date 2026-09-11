@@ -11,37 +11,38 @@ export default function handler(req, res) {
   try {
     const clientId = process.env.ACADEMY_CLIENT || 'default';
 
-    // Validate
     if (!/^[a-zA-Z0-9-_]+$/.test(clientId)) {
       return res.status(400).json({ error: 'Invalid client ID' });
     }
 
-    // Try multiple path strategies — Vercel can resolve differently per runtime
+    // Try all known Vercel root paths
     const roots = [
       process.cwd(),
+      '/var/task',
       path.join(process.cwd(), '..'),
-      '/var/task',                    // Vercel Lambda root
-      path.join('/var/task'),
     ];
 
     let config = null;
 
     for (const root of roots) {
-      const clientPath  = path.join(root, 'clients', `${clientId}.json`);
-      const defaultPath = path.join(root, 'clients', 'default.json');
+      try {
+        const clientPath  = path.join(root, 'clients', `${clientId}.json`);
+        const defaultPath = path.join(root, 'clients', 'default.json');
 
-      if (fs.existsSync(clientPath)) {
-        config = JSON.parse(fs.readFileSync(clientPath, 'utf8'));
-        break;
-      } else if (fs.existsSync(defaultPath)) {
-        config = JSON.parse(fs.readFileSync(defaultPath, 'utf8'));
-        break;
+        if (fs.existsSync(clientPath)) {
+          config = JSON.parse(fs.readFileSync(clientPath, 'utf8'));
+          break;
+        }
+        if (fs.existsSync(defaultPath)) {
+          config = JSON.parse(fs.readFileSync(defaultPath, 'utf8'));
+          break;
+        }
+      } catch(e) {
+        continue;
       }
     }
 
-    // If still nothing found — return fallback
     if (!config) {
-      console.error('Config not found. ACADEMY_CLIENT:', clientId, 'cwd:', process.cwd());
       return res.status(200).json({
         name: 'Trading Academy', shortName: 'Academy', logo: 'GFX',
         branding: {}, links: {}, modules: {}, customTabs: [], footer: {},
@@ -49,7 +50,6 @@ export default function handler(req, res) {
       });
     }
 
-    // Never expose password
     if (config.ibBuilder) delete config.ibBuilder.password;
 
     return res.status(200).json(config);
