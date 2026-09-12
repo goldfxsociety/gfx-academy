@@ -31,6 +31,7 @@ const CONFIGS = {
       wikifxBadge:          true,
       continueCard:         true,
       lessonTimeEstimates:  true,
+      premiumTools:         true,
     },
     customTabs: [],
     footer: {

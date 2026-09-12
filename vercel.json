@@ -5,6 +5,7 @@
     { "source": "/api/shorten",       "destination": "/api/shorten.js"      },
     { "source": "/api/redirect",      "destination": "/api/redirect.js"     },
     { "source": "/api/config",        "destination": "/api/config.js"       },
+    { "source": "/api/verify-tools-code", "destination": "/api/verify-tools-code.js" },
     { "source": "/api/debug",         "destination": "/api/debug.js"        },
     { "source": "/r/:code",           "destination": "/api/redirect.js"     }
   ]
