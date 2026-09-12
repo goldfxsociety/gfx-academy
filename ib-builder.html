@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GFX Academy — IB Link Builder</title>
+<title id="page-title">GFX Academy — IB Link Builder</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -187,6 +187,7 @@ async function initBuilder() {
     // Set name + academy base URL
     const nameEl = document.getElementById('ib-academy-name');
     if (nameEl) nameEl.textContent = base.name || 'Trading Academy';
+    document.title = `${base.shortName || base.name || 'Trading Academy'} — IB Link Builder`;
     ACADEMY_BASE = base.links?.academyBase || window.location.origin + '/academy';
     CFG = base;
   } catch(err) {
