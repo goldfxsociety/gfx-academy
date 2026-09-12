@@ -16,15 +16,17 @@ export default async function handler(req, res) {
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   // Check KV env vars first — fail gracefully if not connected
-  if (!process.env.KV_REST_API_URL || !process.env.KV_REST_API_TOKEN) {
+  // Vercel's own KV product uses KV_REST_API_*; the Upstash marketplace
+  // integration uses UPSTASH_REDIS_REST_*, so accept either naming.
+  const restUrl   = process.env.KV_REST_API_URL   || process.env.UPSTASH_REDIS_REST_URL;
+  const restToken = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!restUrl || !restToken) {
     return res.status(503).json({ error: 'URL shortener not configured on this project' });
   }
 
   // Instantiate inside handler — safe even when env vars are missing on other projects
-  const kv = new Redis({
-    url:   process.env.KV_REST_API_URL,
-    token: process.env.KV_REST_API_TOKEN,
-  });
+  const kv = new Redis({ url: restUrl, token: restToken });
 
   try {
     const { url } = req.body;
