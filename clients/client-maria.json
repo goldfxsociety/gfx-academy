@@ -22,11 +22,6 @@
     "academyBase": "https://maria-trading-academy.vercel.app/academy"
   },
 
-  "ibBuilder": {
-    "passwordType": "pin",
-    "note": "PIN is set via IB_PASSWORD environment variable in Vercel"
-  },
-
   "modules": {
     "candlestickGallery": true,
     "tools": true,

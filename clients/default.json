@@ -22,12 +22,6 @@
     "academyBase": "https://gfx-academy-sand.vercel.app/academy"
   },
 
-  "ibBuilder": {
-    "passwordType": "password",
-    "password": "",
-    "note": "Password is set via IB_PASSWORD environment variable in Vercel — never hardcode here"
-  },
-
   "modules": {
     "candlestickGallery": true,
     "tools": true,

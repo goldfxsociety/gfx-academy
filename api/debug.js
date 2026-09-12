@@ -27,7 +27,6 @@ export default function handler(req, res) {
       status: 'ok',
       env: {
         ACADEMY_CLIENT:  process.env.ACADEMY_CLIENT  || '(not set)',
-        IB_PASSWORD_SET: !!process.env.IB_PASSWORD,
         KV_URL_SET:      !!process.env.KV_REST_API_URL,
         KV_TOKEN_SET:    !!process.env.KV_REST_API_TOKEN,
         NODE_ENV:        process.env.NODE_ENV || '(not set)',

@@ -23,7 +23,6 @@ const CONFIGS = {
       wikifx:      'https://www.wikifx.com/fil/dealer/3052942299.html',
       academyBase: 'https://gfx-academy-sand.vercel.app/academy',
     },
-    ibBuilder: { passwordType: 'password' },
     modules: {
       candlestickGallery:   true,
       tools:                true,
@@ -61,7 +60,6 @@ const CONFIGS = {
       wikifx:      'https://www.wikifx.com/fil/dealer/3052942299.html',
       academyBase: 'https://agm1sniper-academy.vercel.app/academy',
     },
-    ibBuilder: { passwordType: 'both' },
     modules: {
       candlestickGallery:   true,
       tools:                true,
@@ -134,11 +132,5 @@ export default function handler(req, res) {
   const clientId = process.env.ACADEMY_CLIENT || 'default';
   const config   = CONFIGS[clientId] || CONFIGS['default'];
 
-  // Add hasPassword flag so ib-builder knows without a separate API call
-  const safe = { ...config };
-  if (safe.ibBuilder) safe.ibBuilder = { ...safe.ibBuilder };
-  delete safe.ibBuilder?.password;
-  if (safe.ibBuilder) safe.ibBuilder.hasPassword = !!process.env.IB_PASSWORD;
-
-  return res.status(200).json(safe);
+  return res.status(200).json(config);
 }

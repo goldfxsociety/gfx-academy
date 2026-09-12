@@ -22,11 +22,6 @@
     "academyBase": "https://agm1sniper-academy.vercel.app/academy"
   },
 
-  "ibBuilder": {
-    "passwordType": "both",
-    "note": "Password/PIN is set via IB_PASSWORD environment variable in Vercel"
-  },
-
   "modules": {
     "candlestickGallery": true,
     "tools": true,
