@@ -29,13 +29,18 @@ Prioritized by what actually protects a newbie's account, not just what's easies
 
 Tier 2 complete. Middle School grade fully re-tested end to end (all 5 lessons, celebration modal) after the change.
 
-**Tier 3 — decision/scenario simulators (more build effort, still high value):**
-- [ ] Trading Psychology (`hs3`) → scenario cards ("you just lost 3 trades in a row, what do you do?") instead of a single MCQ.
-- [ ] Trading Journal (`hs5`) → fill-in-the-blank mock journal entry.
-- [ ] Backtesting (`co3`) → walk through 10 historical candles, mark your entries, see the result.
-- [ ] Smart Money Concepts (`co4`) → annotated order-block/liquidity-sweep diagram, same style as the candlestick anatomy diagram.
+**Tier 3 — decision/scenario simulators (shipped):**
+- [x] Trading Psychology (`hs3`) → 5-round "what would you actually do?" scenario quiz (moving SL, cutting winners early, FOMO, revenge trading, discipline).
+- [x] Trading Journal (`hs5`) → mock journal entry tool (direction + reason + result toggles). Feedback depends on the *combination*, not just win/loss — a planned loss gets "good process" feedback, an impulsive win gets a warning not to treat it as repeatable.
+- [x] Backtesting (`co3`) → 5-round scenario quiz: does this candle match your rule (enter/skip), plus the existing "is this expectancy profitable" question.
+- [x] Smart Money Concepts (`co4`) → 4-concept intro grid (Order Block, Liquidity Sweep, Fair Value Gap, Change of Character) with mini charts, then a 5-round recognition quiz.
 
-**Tier 4 — lighter polish, lower priority:** remaining mostly-conceptual lessons (Pre-School basics, What is a Broker, Types of Orders, Demo Account, Trading Plan, Gold Sessions, Building Your Strategy, Demo vs Live) could get small touches later — e.g. an order-type matching game for `el4`, a live Manila-time session clock for `co2` — but these aren't where newbies get hurt, so lowest priority.
+**Tier 4 — lighter polish (shipped):**
+- [x] Types of Orders (`el4`) → 4-round scenario quiz covering all 3 order types both directions (Buy Limit, Market, Buy Stop, Sell Limit).
+- [x] Gold Trading Sessions (`co2`) → deterministic Session Checker (enter Manila hour/minute → London-NY Overlap / London Open / outside key windows, plus a nearby-news heads-up). Built as a calculator instead of a live clock so it stays reliably testable.
+- [x] The 10 remaining conceptual lessons (`ps1`-`ps5`, `el1`, `el5`, `co1`, `co5`, `gr1`) each converted from a single MCQ to a 3-round scenario quiz, using only facts already stated in that lesson's own text.
+
+Tiers 3 and 4 complete — every lesson in the academy is now interactive. Full curriculum regression re-tested end to end: all 29 lessons across all 6 grades, every grade-completion celebration, from a fresh session.
 
 ## Other loose ends from earlier sessions
 

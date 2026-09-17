@@ -137,6 +137,8 @@ canvas.pattern-quiz-cv{background:var(--purple-card);border:1px solid var(--purp
 .rsi-gauge-marker{position:absolute;top:-4px;width:3px;height:24px;background:var(--text-main);border-radius:2px}
 .rsi-gauge-scale{display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:6px}
 .fib-levels{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.toggle-btn.selected{border-color:var(--gold);color:var(--gold)}
+#jt-reasons.quiz-options{margin-top:2px}
 .badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 .badge-card{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:12px;padding:13px;text-align:center}
 .badge-card.earned{border-color:var(--gold-dim)}
@@ -859,38 +861,22 @@ function buildCustomTabs(tabs) {
 
 // ── QUIZ FEEDBACK ─────────────────────────────────────────────────────────────
 const QUIZ_FB = {
-  ps1:'XAU is the ISO code for Gold, USD for US Dollar. XAUUSD = price of Gold in US Dollars.',
-  ps2:'Gold is a safe-haven asset. Fear = demand for Gold = price rises.',
-  ps3:'Short = profit when price goes DOWN. Sold at 2400, bought back at 2350 = $50 gain per oz.',
-  ps4:'In a bull market, dips are buying opportunities.',
-  ps5:'Spread = Ask minus Bid = $2,300.30 minus $2,300.00 = $0.30 = 30 pips.',
-  el1:'The spread is the broker main revenue — built into every trade.',
   el3:'0.1 lot = 10 oz. 1 pip = $0.10 for 0.1 lot. 100 x $0.10 = $10.',
-  el4:'A buy limit fills when price drops to your level. Perfect for buying pullbacks.',
-  el5:'Consistency over weeks is the standard. If you cannot be profitable on demo, live will be harder.',
   ms5:'Top-down: Higher timeframe gives direction. Trade lower timeframes in alignment.',
-  hs3:'Moving SL to avoid being stopped out is emotional trading. Honor your SL.',
-  hs5:'A journal reveals your real edge and weaknesses.',
-  co1:'A plan removes emotional decisions by pre-defining your rules.',
-  co2:'The London-NY overlap (9 PM to 12 AM PHT) is peak Gold volatility.',
-  co3:'40 wins x 2R = 80R. 60 losses x 1R = 60R. Net = +20R. Yes, profitable.',
-  co4:'Liquidity sweeps trigger retail stop losses, giving institutions better entry prices.',
-  co5:'M15 for entry, H4 for trend direction, H1 for the S/R zone.',
-  gr1:'Real money = real emotions. The psychological shift is the biggest transition challenge.',
   gr2:'Revenge trading = emotional, oversized trades after losses.',
 };
 
 // ── GRADE & LESSON DATA ───────────────────────────────────────────────────────
 const grades = [
   {id:'preschool',icon:'📘',label:'Pre-School',name:"What Even Is Trading?",desc:'Absolute basics, zero jargon.',badge:'🎒',badgeName:'Enrolled!',lessons:[
-    {id:'ps1',title:'What is the Financial Market?',content:`<h2 class="lesson-header">What is the Financial Market?</h2><p class="lesson-body">Think of the financial market as a giant <strong>digital marketplace</strong> — but instead of groceries, people trade currencies, stocks, and commodities.</p><div class="info-box"><strong>Key markets:</strong>Forex (currencies) · Stocks · Commodities (Gold, Oil) · Crypto</div><p class="lesson-body">As a XAUUSD trader you will be in the <strong>commodities + forex crossover</strong> — trading Gold priced in US Dollars.</p>`,quiz:{q:'XAUUSD means...',opts:['Gold vs Euro','Gold vs US Dollar','Silver vs US Dollar','Gold vs Japanese Yen'],a:1}},
-    {id:'ps2',title:'Stocks vs Forex vs Gold',content:`<h2 class="lesson-header">Stocks, Forex, Gold — The Difference</h2><p class="lesson-body"><strong>Stocks</strong> = owning a piece of a company.<br><strong>Forex</strong> = exchanging currencies (USD vs PHP).<br><strong>Gold (XAUUSD)</strong> = buying/selling Gold priced in US Dollars.</p><div class="info-box"><strong>Why Gold?</strong>Most liquid commodity globally. Trades 24hrs/day, 5 days/week — perfect for retail traders.</div><p class="lesson-body">Gold moves because of <strong>fear, inflation, and US economic data</strong>. Scared market = people buy Gold. Strong USD = Gold drops.</p>`,quiz:{q:'What usually happens to Gold when people panic or fear?',opts:['Gold drops sharply','Gold moves sideways','Gold goes up','Gold gets delisted'],a:2}},
-    {id:'ps3',title:'How Do Traders Make Money?',content:`<h2 class="lesson-header">How Do Traders Make Money?</h2><p class="lesson-body">Simple: <strong>buy low, sell high</strong> — or <strong>sell high, buy back lower</strong> (short selling).</p><div class="info-box"><strong>Example:</strong> Gold is at $2,300. You buy. It hits $2,320. You sell. You made $20 per oz.</div>`,quiz:{q:'If you short Gold at $2,400 and it falls to $2,350, you:',opts:['Lost money','Made $50 per oz profit','Broke even','Got margin called'],a:1}},
-    {id:'ps4',title:'Bull Market vs Bear Market',content:`<h2 class="lesson-header">Bull Market vs Bear Market</h2><p class="lesson-body">A <strong>bull market</strong> is when prices are rising. A <strong>bear market</strong> is when prices are falling.</p><div class="info-box"><strong>For Gold traders:</strong><br>🐂 Bull market = buy on pullbacks<br>🐻 Bear market = sell on rallies<br>Always trade in the direction of the bigger trend.</div>`,quiz:{q:'In a bull market, the best general strategy is to:',opts:['Short every rally','Buy on pullbacks and dips','Stay out of the market','Go against the trend'],a:1}},
-    {id:'ps5',title:'What is a Spread?',content:`<h2 class="lesson-header">What is a Spread?</h2><p class="lesson-body">The spread is the <strong>difference between the Buy (Ask) and Sell (Bid) price</strong>. It is the broker fee — built into the price.</p><div class="info-box"><strong>Example:</strong><br>Bid: $2,300.50 · Ask: $2,301.00<br>Spread = $0.50 = 50 pips<br><br>ACCM XAUUSD: typical spread 20 to 30 pips.</div>`,quiz:{q:'Bid is $2,300.00, Ask is $2,300.30. The spread is:',opts:['$0.30 which is 30 pips','$2,300.00','$0.03 which is 3 pips','$3.00 which is 300 pips'],a:0}},
+    {id:'ps1',title:'What is the Financial Market?',content:`<h2 class="lesson-header">What is the Financial Market?</h2><p class="lesson-body">Think of the financial market as a giant <strong>digital marketplace</strong> — but instead of groceries, people trade currencies, stocks, and commodities.</p><div class="info-box"><strong>Key markets:</strong>Forex (currencies) · Stocks · Commodities (Gold, Oil) · Crypto</div><p class="lesson-body">As a XAUUSD trader you will be in the <strong>commodities + forex crossover</strong> — trading Gold priced in US Dollars.</p>`,scenarioQuiz:'PS1_SCENARIOS',scenarioIcon:'💵'},
+    {id:'ps2',title:'Stocks vs Forex vs Gold',content:`<h2 class="lesson-header">Stocks, Forex, Gold — The Difference</h2><p class="lesson-body"><strong>Stocks</strong> = owning a piece of a company.<br><strong>Forex</strong> = exchanging currencies (USD vs PHP).<br><strong>Gold (XAUUSD)</strong> = buying/selling Gold priced in US Dollars.</p><div class="info-box"><strong>Why Gold?</strong>Most liquid commodity globally. Trades 24hrs/day, 5 days/week — perfect for retail traders.</div><p class="lesson-body">Gold moves because of <strong>fear, inflation, and US economic data</strong>. Scared market = people buy Gold. Strong USD = Gold drops.</p>`,scenarioQuiz:'PS2_SCENARIOS',scenarioIcon:'⚖️'},
+    {id:'ps3',title:'How Do Traders Make Money?',content:`<h2 class="lesson-header">How Do Traders Make Money?</h2><p class="lesson-body">Simple: <strong>buy low, sell high</strong> — or <strong>sell high, buy back lower</strong> (short selling).</p><div class="info-box"><strong>Example:</strong> Gold is at $2,300. You buy. It hits $2,320. You sell. You made $20 per oz.</div>`,scenarioQuiz:'PS3_SCENARIOS',scenarioIcon:'💵'},
+    {id:'ps4',title:'Bull Market vs Bear Market',content:`<h2 class="lesson-header">Bull Market vs Bear Market</h2><p class="lesson-body">A <strong>bull market</strong> is when prices are rising. A <strong>bear market</strong> is when prices are falling.</p><div class="info-box"><strong>For Gold traders:</strong><br>🐂 Bull market = buy on pullbacks<br>🐻 Bear market = sell on rallies<br>Always trade in the direction of the bigger trend.</div>`,scenarioQuiz:'PS4_SCENARIOS',scenarioIcon:'🐂'},
+    {id:'ps5',title:'What is a Spread?',content:`<h2 class="lesson-header">What is a Spread?</h2><p class="lesson-body">The spread is the <strong>difference between the Buy (Ask) and Sell (Bid) price</strong>. It is the broker fee — built into the price.</p><div class="info-box"><strong>Example:</strong><br>Bid: $2,300.50 · Ask: $2,301.00<br>Spread = $0.50 = 50 pips<br><br>ACCM XAUUSD: typical spread 20 to 30 pips.</div>`,scenarioQuiz:'PS5_SCENARIOS',scenarioIcon:'💰'},
   ]},
   {id:'elementary',icon:'📗',label:'Elementary',name:'Brokers, Charts & Basics',desc:'Charts, brokers, your first account.',badge:'✏️',badgeName:'Grade Schooler!',lessons:[
-    {id:'el1',title:'What is a Broker?',content:`<h2 class="lesson-header">What is a Broker?</h2><p class="lesson-body">A broker is the <strong>middleman</strong> between you and the market. Without one, you cannot place trades.</p><div class="info-box"><strong>Why ACCM?</strong>Regulated broker with low Gold spreads, fast execution, and MT5 — ideal for XAUUSD traders in Southeast Asia.</div>`,quiz:{q:'How does a broker primarily earn revenue?',opts:['From your losses only','Through the spread (Bid-Ask gap)','Monthly subscription','By investing your funds'],a:1}},
+    {id:'el1',title:'What is a Broker?',content:`<h2 class="lesson-header">What is a Broker?</h2><p class="lesson-body">A broker is the <strong>middleman</strong> between you and the market. Without one, you cannot place trades.</p><div class="info-box"><strong>Why ACCM?</strong>Regulated broker with low Gold spreads, fast execution, and MT5 — ideal for XAUUSD traders in Southeast Asia.</div>`,scenarioQuiz:'EL1_SCENARIOS',scenarioIcon:'🤝'},
     {id:'el2',title:'Candlestick Anatomy',content:`<h2 class="lesson-header">Candlestick Anatomy</h2><p class="lesson-body">Every candlestick has <strong>4 values</strong>: Open, High, Low, Close (OHLC). The body = Open-to-Close range. The wicks = High and Low extremes.</p><div class="anatomy-wrap"><canvas class="anatomy-cv" id="anatomy-cv" width="240" height="180"></canvas><div class="anatomy-caption">This is a <strong>bullish</strong> candle — Close is above Open, so the body is colored green. The thin lines sticking out top and bottom are the <strong>wicks</strong> (High and Low).</div></div><div class="info-box"><strong>🟢 Bullish (Green):</strong> Close greater than Open — buyers won.<br><strong>🔴 Bearish (Red):</strong> Close less than Open — sellers dominated.</div><p class="lesson-body">Tap an example below to see it plotted, then try your own values.</p>`,candleQuiz:true,anatomyDiagram:true},
     {id:'el2b',title:'Candlestick Patterns You’ll See Every Day',content:`<h2 class="lesson-header">Candlestick Patterns</h2><p class="lesson-body">Individual candles start forming <strong>shapes traders recognize</strong> — these shapes hint at what buyers and sellers are about to do next.</p><div class="pattern-intro-grid">
       <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-bullish-engulfing" width="70" height="60"></canvas><div class="pattern-intro-name">Bullish Engulfing</div><div class="pattern-intro-desc">Buyers overpower sellers</div></div>
@@ -901,12 +887,12 @@ const grades = [
       <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-pin-bar" width="70" height="60"></canvas><div class="pattern-intro-name">Pin Bar</div><div class="pattern-intro-desc">Rejection signal</div></div>
     </div><p class="lesson-body">Now test yourself — 5 rounds, guess the pattern from the shape alone.</p>`,introPatterns:['bullish-engulfing','bearish-engulfing','doji','hammer','shooting-star','pin-bar'],patternQuiz:true},
     {id:'el3',title:'Pips, Lots & Leverage',content:`<h2 class="lesson-header">Pips, Lots & Leverage</h2><p class="lesson-body">A <strong>pip</strong> for XAUUSD = $0.01. Gold moving from $2,300.00 to $2,300.50 = 50 pips.</p><div class="info-box"><strong>Lot sizes:</strong>1 Standard = 100 oz · 1 Mini = 10 oz · 1 Micro = 1 oz</div>`,quiz:{q:'Gold moves 100 pips, you hold 0.1 lot. Your P&L is:',opts:['$0.10','$1.00','$10.00','$100.00'],a:2}},
-    {id:'el4',title:'Types of Orders',content:`<h2 class="lesson-header">Types of Orders</h2><div class="info-box"><strong>Market Order:</strong> Execute immediately at current price.<br><strong>Limit Order:</strong> Execute at a specific price or better.<br><strong>Stop Order:</strong> Execute when price reaches a trigger level.</div>`,quiz:{q:'You want to buy Gold only if it drops to $2,280 (currently $2,310). Which order?',opts:['Market order — buy now','Buy limit at $2,280','Buy stop at $2,280','Stop loss order'],a:1}},
-    {id:'el5',title:'Demo Account — Your Practice Ground',content:`<h2 class="lesson-header">The Demo Account</h2><p class="lesson-body">A demo account uses <strong>virtual money</strong> on real market data. Same charts, same spreads, same platform — just no real money at risk.</p><div class="info-box"><strong>How to use it:</strong><br>• Test your strategy without risking capital<br>• Learn the MT5 platform<br>• Aim for at least 4 profitable weeks before switching to live</div>`,quiz:{q:'How long should you trade demo before going live?',opts:['1 day is enough','At least several consistent profitable weeks','Demo is useless, go live immediately','At least 3 years'],a:1}},
+    {id:'el4',title:'Types of Orders',content:`<h2 class="lesson-header">Types of Orders</h2><div class="info-box"><strong>Market Order:</strong> Execute immediately at current price.<br><strong>Limit Order:</strong> Execute at a specific price or better.<br><strong>Stop Order:</strong> Execute when price reaches a trigger level.</div><p class="lesson-body">Now match the right order to each scenario below.</p>`,scenarioQuiz:'ORDER_SCENARIOS',scenarioIcon:'📝'},
+    {id:'el5',title:'Demo Account — Your Practice Ground',content:`<h2 class="lesson-header">The Demo Account</h2><p class="lesson-body">A demo account uses <strong>virtual money</strong> on real market data. Same charts, same spreads, same platform — just no real money at risk.</p><div class="info-box"><strong>How to use it:</strong><br>• Test your strategy without risking capital<br>• Learn the MT5 platform<br>• Aim for at least 4 profitable weeks before switching to live</div>`,scenarioQuiz:'EL5_SCENARIOS',scenarioIcon:'💻'},
   ]},
   {id:'middle',icon:'📙',label:'Middle School',name:'Technical Analysis 101',desc:'S/R, trends, indicators.',badge:'📐',badgeName:'Middle Schooler!',lessons:[
-    {id:'ms1',title:'Support & Resistance Zones',content:`<h2 class="lesson-header">Support & Resistance</h2><p class="lesson-body"><strong>Support</strong> is a price floor where buyers overpower sellers. <strong>Resistance</strong> is a ceiling where sellers dominate.</p><div class="info-box"><strong>Role Reversal:</strong> Broken resistance often becomes new support — and vice versa.</div><p class="lesson-body">Now test your eye for it — 5 real scenarios.</p>`,srQuiz:true},
-    {id:'ms2',title:'Market Structure & Trends',content:`<h2 class="lesson-header">Market Structure</h2><p class="lesson-body"><strong>Uptrend</strong> = Higher Highs + Higher Lows. <strong>Downtrend</strong> = Lower Highs + Lower Lows.</p><div class="info-box"><strong>The Golden Rule:</strong> Trade WITH the trend. A Break of Structure (BOS) signals a potential trend change.</div><p class="lesson-body">Now read the structure yourself — 5 real scenarios.</p>`,msQuiz:true},
+    {id:'ms1',title:'Support & Resistance Zones',content:`<h2 class="lesson-header">Support & Resistance</h2><p class="lesson-body"><strong>Support</strong> is a price floor where buyers overpower sellers. <strong>Resistance</strong> is a ceiling where sellers dominate.</p><div class="info-box"><strong>Role Reversal:</strong> Broken resistance often becomes new support — and vice versa.</div><p class="lesson-body">Now test your eye for it — 5 real scenarios.</p>`,scenarioQuiz:'SR_SCENARIOS',scenarioIcon:'🎯'},
+    {id:'ms2',title:'Market Structure & Trends',content:`<h2 class="lesson-header">Market Structure</h2><p class="lesson-body"><strong>Uptrend</strong> = Higher Highs + Higher Lows. <strong>Downtrend</strong> = Lower Highs + Lower Lows.</p><div class="info-box"><strong>The Golden Rule:</strong> Trade WITH the trend. A Break of Structure (BOS) signals a potential trend change.</div><p class="lesson-body">Now read the structure yourself — 5 real scenarios.</p>`,scenarioQuiz:'MS_SCENARIOS',scenarioIcon:'📊'},
     {id:'ms3',title:'Moving Averages & RSI',content:`<h2 class="lesson-header">Moving Averages & RSI</h2><p class="lesson-body">The <strong>Moving Average (MA)</strong> smooths price to show trend direction. The 50 MA and 200 MA are watched globally.</p><div class="info-box"><strong>Golden Cross:</strong> 50 MA above 200 MA = bullish.<br><strong>Death Cross:</strong> 50 MA below 200 MA = bearish.<br><strong>RSI:</strong> Above 70 = overbought. Below 30 = oversold.</div><p class="lesson-body">Try both tools below with your own numbers.</p>`,maRsiTool:true},
     {id:'ms4',title:'Fibonacci Retracement',content:`<h2 class="lesson-header">Fibonacci Retracement</h2><p class="lesson-body">Fibonacci levels are <strong>mathematical ratios</strong> used to find likely reversal zones within a trend.</p><div class="info-box"><strong>Key levels:</strong><br>0.382 — shallow pullback<br>0.500 — mid-level<br>0.618 — the golden ratio, strongest level<br>0.786 — deep pullback</div><p class="lesson-body">Calculate real levels below from any swing high and low.</p>`,fibCalc:true},
     {id:'ms5',title:'Timeframes — Which One to Use?',content:`<h2 class="lesson-header">Timeframes</h2><div class="info-box"><strong>Top-down approach:</strong><br>📊 H4 or Daily — overall trend direction<br>📈 H1 — find the setup<br>🔍 M15 or M5 — time your entry precisely</div>`,quiz:{q:'A Gold scalper checks the Daily chart first. Why?',opts:['Daily shows the most pips','To get the overall trend bias before entering on lower timeframes','Daily charts are easier to read','Scalpers never use the daily'],a:1}},
@@ -914,19 +900,24 @@ const grades = [
   {id:'highschool',icon:'📕',label:'High School',name:'Risk, Strategy & Psychology',desc:'What separates winners from losers.',badge:'🎓',badgeName:'High Schooler!',lessons:[
     {id:'hs1',title:'Position Sizing & Lot Calculation',content:`<h2 class="lesson-header">Position Sizing</h2><p class="lesson-body">Never risk more than <strong>1 to 2% of your account per trade</strong>. Guessing your lot size is how newbie accounts blow up — always calculate it.</p><div class="info-box"><strong>Formula:</strong>Risk divided by (SL pips x Pip Value) = Lot Size<br><br>$1,000 account, 1% risk = $10 max loss.<br>50 pip SL: $10 divided by (50 x $1.00) = 0.20 lot</div><p class="lesson-body">Now calculate your own below — tap an example or enter your real numbers.</p>`,lotCalc:true},
     {id:'hs2',title:'Stop Loss & Take Profit',content:`<h2 class="lesson-header">Stop Loss & Take Profit</h2><p class="lesson-body">A <strong>Stop Loss (SL)</strong> closes your trade at a set loss level. A <strong>Take Profit (TP)</strong> locks in gains at your target.</p><div class="info-box"><strong>Non-negotiable:</strong> Never trade without a stop loss. Ever.<br><br>Place SL at a logical structure level — below support for longs, above resistance for shorts.</div><p class="lesson-body">Now test your judgment below — 5 real scenarios.</p>`,sltpQuiz:true},
-    {id:'hs3',title:'Trading Psychology',content:`<h2 class="lesson-header">Trading Psychology</h2><p class="lesson-body">90% of retail traders lose — and most of it is psychology, not strategy.</p><div class="info-box"><strong>The Big 3 Killers:</strong><br>😨 Fear → closing winners too early<br>😤 Greed → holding losers hoping for reversals<br>😱 FOMO → chasing moves after they have happened</div>`,quiz:{q:'Moving your Stop Loss further to give the trade more room is:',opts:['Smart trade management','FOMO','Greed and hope bias — a dangerous habit','Professional scaling'],a:2}},
+    {id:'hs3',title:'Trading Psychology',content:`<h2 class="lesson-header">Trading Psychology</h2><p class="lesson-body">90% of retail traders lose — and most of it is psychology, not strategy.</p><div class="info-box"><strong>The Big 3 Killers:</strong><br>😨 Fear → closing winners too early<br>😤 Greed → holding losers hoping for reversals<br>😱 FOMO → chasing moves after they have happened</div><p class="lesson-body">What would you actually do? 5 real scenarios below.</p>`,scenarioQuiz:'PSYCH_SCENARIOS',scenarioIcon:'🧠'},
     {id:'hs4',title:'Risk-Reward Ratio',content:`<h2 class="lesson-header">Risk-Reward Ratio</h2><p class="lesson-body">RR compares how much you risk vs how much you aim to make. <strong>1:2 RR</strong> = risk $10 to make $20.</p><div class="info-box"><strong>Why it matters:</strong><br>With 1:2 RR and 40% win rate:<br>4 wins x $20 = $80<br>6 losses x $10 = $60<br>Net = +$20 — profitable!</div><p class="lesson-body">Play with your own numbers below — see exactly when a strategy is profitable, break-even, or a loser.</p>`,rrCalc:true},
-    {id:'hs5',title:'Building a Trading Journal',content:`<h2 class="lesson-header">The Trading Journal</h2><p class="lesson-body">The most underused tool by retail traders and the most used by professionals.</p><div class="info-box"><strong>Log every trade:</strong><br>• Date and time · Pair · Direction<br>• Entry, SL, TP · Lot size<br>• Reason for entry · Result · Chart screenshot</div>`,quiz:{q:'The main purpose of a trading journal is to:',opts:['Show off trades','Track P&L for tax only','Identify performance patterns and improve systematically','Predict the next trade'],a:2}},
+    {id:'hs5',title:'Building a Trading Journal',content:`<h2 class="lesson-header">The Trading Journal</h2><p class="lesson-body">The most underused tool by retail traders and the most used by professionals.</p><div class="info-box"><strong>Log every trade:</strong><br>• Date and time · Pair · Direction<br>• Entry, SL, TP · Lot size<br>• Reason for entry · Result · Chart screenshot</div><p class="lesson-body">Try logging a mock entry below — notice the feedback depends on more than just win or loss.</p>`,journalTool:true},
   ]},
   {id:'college',icon:'📓',label:'College',name:'Building Your Trading System',desc:'Strategy, backtesting, live prep.',badge:'🏛️',badgeName:'College Grad!',lessons:[
-    {id:'co1',title:'What is a Trading Plan?',content:`<h2 class="lesson-header">Your Trading Plan</h2><p class="lesson-body">A trading plan is your rulebook. It removes guesswork and emotion from every decision.</p><div class="info-box"><strong>A solid plan defines:</strong><br>• Which pairs you trade<br>• Which sessions (London, NY overlap)<br>• Exact entry criteria<br>• SL and TP rules<br>• Max trades per day · Max daily loss limit</div>`,quiz:{q:'The main purpose of a trading plan is to:',opts:['Guarantee profits','Remove emotions via pre-defined rules','Copy professional traders','Predict market direction'],a:1}},
-    {id:'co2',title:'Gold Trading Sessions (Manila Time)',content:`<h2 class="lesson-header">Gold Sessions — Manila Time</h2><p class="lesson-body">XAUUSD is most volatile during <strong>London and New York sessions</strong>.</p><div class="info-box"><strong>Key times (PHT):</strong><br>🇬🇧 London Open: 3:00 PM to 4:00 PM<br>🇺🇸 NY Open: 9:00 PM to 10:00 PM<br>⚡ London-NY Overlap: 9:00 PM to 12:00 AM<br>📰 US News: 8:30 PM or 9:30 PM PHT</div>`,quiz:{q:'Best time to trade XAUUSD for a Manila-based trader:',opts:['6:00 to 9:00 AM (Asian)','9:00 PM to 12:00 AM (London-NY overlap)','12:00 to 2:00 PM (lunch)','Anytime is the same'],a:1}},
-    {id:'co3',title:'Backtesting Your Strategy',content:`<h2 class="lesson-header">Backtesting</h2><p class="lesson-body"><strong>Backtesting</strong> = testing your rules on historical data before risking real money.</p><div class="info-box"><strong>Simple process:</strong><br>1. Open XAUUSD on TradingView<br>2. Go back 3 to 6 months<br>3. Apply your entry rules bar by bar<br>4. Log each trade and calculate win rate</div>`,quiz:{q:'40% win rate + 1:2 RR. Is this profitable?',opts:['No — below 50% win rate','Yes — winners outweigh losers','Break-even at best','Cannot determine'],a:1}},
-    {id:'co4',title:'Smart Money Concepts (Intro)',content:`<h2 class="lesson-header">Smart Money Concepts</h2><p class="lesson-body"><strong>Smart Money</strong> = institutional traders who move the market.</p><div class="info-box"><strong>Core SMC concepts:</strong><br>📍 Order Blocks — zones where institutions placed large orders<br>📍 Fair Value Gaps — inefficiencies price tends to fill<br>📍 Liquidity Sweeps — price hunts stop losses before reversing<br>📍 Change of Character — structural shift</div>`,quiz:{q:'A liquidity sweep means:',opts:['Broker manipulation','Price briefly hunts stop losses before reversing','A news spike','Strong trending move'],a:1}},
-    {id:'co5',title:'Building Your First Strategy',content:`<h2 class="lesson-header">Your First Strategy</h2><div class="info-box"><strong>GFX Starter Strategy:</strong><br>1. Check H4 trend direction<br>2. Wait for pullback to H1 S/R<br>3. Look for candle confirmation (pin bar, engulfing)<br>4. Enter on M15 with SL below or above structure<br>5. TP at 1:2 RR minimum<br>6. Only during London or NY session</div>`,quiz:{q:'The GFX Starter Strategy enters on which timeframe?',opts:['H4 signal','H1 structure','M15 entry','M1 precision'],a:2}},
+    {id:'co1',title:'What is a Trading Plan?',content:`<h2 class="lesson-header">Your Trading Plan</h2><p class="lesson-body">A trading plan is your rulebook. It removes guesswork and emotion from every decision.</p><div class="info-box"><strong>A solid plan defines:</strong><br>• Which pairs you trade<br>• Which sessions (London, NY overlap)<br>• Exact entry criteria<br>• SL and TP rules<br>• Max trades per day · Max daily loss limit</div>`,scenarioQuiz:'CO1_SCENARIOS',scenarioIcon:'📋'},
+    {id:'co2',title:'Gold Trading Sessions (Manila Time)',content:`<h2 class="lesson-header">Gold Sessions — Manila Time</h2><p class="lesson-body">XAUUSD is most volatile during <strong>London and New York sessions</strong>.</p><div class="info-box"><strong>Key times (PHT):</strong><br>🇬🇧 London Open: 3:00 PM to 4:00 PM<br>🇺🇸 NY Open: 9:00 PM to 10:00 PM<br>⚡ London-NY Overlap: 9:00 PM to 12:00 AM<br>📰 US News: 8:30 PM or 9:30 PM PHT</div><p class="lesson-body">Check any Manila time below to see what session you'd be trading in.</p>`,sessionCheck:true},
+    {id:'co3',title:'Backtesting Your Strategy',content:`<h2 class="lesson-header">Backtesting</h2><p class="lesson-body"><strong>Backtesting</strong> = testing your rules on historical data before risking real money.</p><div class="info-box"><strong>Simple process:</strong><br>1. Open XAUUSD on TradingView<br>2. Go back 3 to 6 months<br>3. Apply your entry rules bar by bar<br>4. Log each trade and calculate win rate</div>`,scenarioQuiz:'BACKTEST_SCENARIOS',scenarioIcon:'🔬'},
+    {id:'co4',title:'Smart Money Concepts (Intro)',content:`<h2 class="lesson-header">Smart Money Concepts</h2><p class="lesson-body"><strong>Smart Money</strong> = institutional traders who move the market.</p><div class="pattern-intro-grid">
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="smc-intro-order-block" width="70" height="60"></canvas><div class="pattern-intro-name">Order Block</div><div class="pattern-intro-desc">Pre-move consolidation</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="smc-intro-liquidity-sweep" width="70" height="60"></canvas><div class="pattern-intro-name">Liquidity Sweep</div><div class="pattern-intro-desc">Stop-hunt then reverse</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="smc-intro-fair-value-gap" width="70" height="60"></canvas><div class="pattern-intro-name">Fair Value Gap</div><div class="pattern-intro-desc">Imbalance to fill</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="smc-intro-change-of-character" width="70" height="60"></canvas><div class="pattern-intro-name">Change of Character</div><div class="pattern-intro-desc">Early reversal warning</div></div>
+    </div>`,smcIntro:true,scenarioQuiz:'SMC_SCENARIOS',scenarioIcon:'🏦'},
+    {id:'co5',title:'Building Your First Strategy',content:`<h2 class="lesson-header">Your First Strategy</h2><div class="info-box"><strong>GFX Starter Strategy:</strong><br>1. Check H4 trend direction<br>2. Wait for pullback to H1 S/R<br>3. Look for candle confirmation (pin bar, engulfing)<br>4. Enter on M15 with SL below or above structure<br>5. TP at 1:2 RR minimum<br>6. Only during London or NY session</div>`,scenarioQuiz:'CO5_SCENARIOS',scenarioIcon:'🕐'},
   ]},
   {id:'graduation',icon:'🎓',label:'Graduation',name:"You're Ready to Trade Live",desc:'Demo to live — the final step.',badge:'🏅',badgeName:'Graduate!',lessons:[
-    {id:'gr1',title:'Demo vs Live Account',content:`<h2 class="lesson-header">Demo vs Live — Know the Gap</h2><p class="lesson-body">Demo = virtual money, zero emotional pressure. Live = real money, and your psychology changes completely.</p><div class="info-box"><strong>The Psychological Gap:</strong>Most traders perform well on demo then blow their first live account. Real money triggers fear and greed at a level demo never can.</div>`,quiz:{q:'Why do traders often struggle more on live vs demo?',opts:['Demo has better spreads','Real money triggers emotions absent in demo','Live execution is slower','Demo has more indicators'],a:1}},
+    {id:'gr1',title:'Demo vs Live Account',content:`<h2 class="lesson-header">Demo vs Live — Know the Gap</h2><p class="lesson-body">Demo = virtual money, zero emotional pressure. Live = real money, and your psychology changes completely.</p><div class="info-box"><strong>The Psychological Gap:</strong>Most traders perform well on demo then blow their first live account. Real money triggers fear and greed at a level demo never can.</div>`,scenarioQuiz:'GR1_SCENARIOS',scenarioIcon:'🧠'},
     {id:'gr2',title:'Common Beginner Mistakes',content:`<h2 class="lesson-header">Mistakes to Avoid</h2><div class="info-box"><strong>Top 6 beginner mistakes:</strong><br>❌ No stop loss<br>❌ Oversized lots<br>❌ Trading news without a plan<br>❌ Revenge trading after a loss<br>❌ Moving SL to avoid being stopped<br>❌ Switching strategies every week</div>`,quiz:{q:'A trader loses 3 in a row and opens a larger trade to win it back. This is:',opts:['Smart scaling','A valid strategy','Revenge trading — one of the most dangerous habits','Normal risk management'],a:2}},
     {id:'gr3',title:'Opening Your ACCM Account',content:`<h2 class="lesson-header">Open Your ACCM Account</h2><p class="lesson-body">ACCM offers competitive Gold spreads, fast MT5 execution, and reliable support across Southeast Asia.</p><div class="info-box"><strong>Steps to get started:</strong><br>1. Click the register link below<br>2. Complete KYC (ID + selfie)<br>3. Choose account type<br>4. Start on demo — go live when consistently profitable</div>`,finalCTA:true},
   ]},
@@ -1016,12 +1007,12 @@ function renderFooters() {
 
 // ── LESSON TIME ESTIMATES ─────────────────────────────────────────────────────
 const LESSON_TIME = {
-  ps1:'3 min',ps2:'4 min',ps3:'3 min',ps4:'3 min',ps5:'3 min',
-  el1:'4 min',el2:'6 min',el2b:'6 min',el3:'4 min',el4:'4 min',el5:'4 min',
+  ps1:'5 min',ps2:'5 min',ps3:'5 min',ps4:'5 min',ps5:'5 min',
+  el1:'5 min',el2:'6 min',el2b:'6 min',el3:'4 min',el4:'5 min',el5:'5 min',
   ms1:'6 min',ms2:'6 min',ms3:'6 min',ms4:'6 min',ms5:'4 min',
-  hs1:'6 min',hs2:'6 min',hs3:'5 min',hs4:'6 min',hs5:'4 min',
-  co1:'5 min',co2:'4 min',co3:'5 min',co4:'5 min',co5:'5 min',
-  gr1:'4 min',gr2:'4 min',gr3:'3 min',
+  hs1:'6 min',hs2:'6 min',hs3:'6 min',hs4:'6 min',hs5:'5 min',
+  co1:'6 min',co2:'5 min',co3:'6 min',co4:'6 min',co5:'6 min',
+  gr1:'6 min',gr2:'4 min',gr3:'3 min',
 };
 // ── CONTINUE CARD ─────────────────────────────────────────────────────────────
 function renderContinueCard() {
@@ -1291,6 +1282,208 @@ const MS_SCENARIOS = [
     tip:'Highs and lows aren’t progressing in either direction — price is just oscillating in a range.' },
 ];
 
+const PSYCH_SCENARIOS = [
+  { chart:null, icon:'😱', question:'Your trade is going against you, so you move your Stop Loss further away to give it "more room". This is:',
+    options:['Greed and hope bias — a dangerous habit','Smart trade management','Professional scaling','A valid strategy'], correct:0,
+    tip:'Moving your SL to avoid a loss turns a small, planned loss into a potentially much bigger one.' },
+  { chart:null, icon:'😨', question:'Your trade is up nicely, but you close it early — far below your Take Profit — because you\'re scared it\'ll reverse. This is:',
+    options:['Fear — cutting winners short','Smart profit-taking','Professional discipline','FOMO'], correct:0,
+    tip:'Consistently cutting winners short caps your upside while your losses stay full-sized — a losing formula even with a good win rate.' },
+  { chart:null, icon:'🏃', question:'Gold just spiked 50 pips without you in the trade, so you jump in immediately with no plan. This is:',
+    options:['FOMO — chasing a move that already happened','A smart, fast reaction','Professional scalping','Revenge trading'], correct:0,
+    tip:'By the time you FOMO into a move, the easy part is usually already over — you\'re often buying the top of the spike.' },
+  { chart:null, icon:'😡', question:'You just lost 3 trades in a row and open a much bigger position to "win it back" fast. This is:',
+    options:['Revenge trading — one of the most dangerous habits','Smart scaling','Normal risk management','A valid strategy'], correct:0,
+    tip:'Revenge trading combines two of the worst habits at once: emotional decisions and oversized risk.' },
+  { chart:null, icon:'✅', question:'You follow your trading plan\'s rules exactly, even though it feels uncomfortable in the moment. This is:',
+    options:['Discipline — the actual goal','Overthinking it','A sign you should change your plan','Unnecessary caution'], correct:0,
+    tip:'Discipline means trusting your tested rules over your in-the-moment emotions — that\'s what separates consistent traders from the 90% who lose.' },
+];
+
+const BACKTEST_SCENARIOS = [
+  { chart:{ohlc:[{o:52,h:54,l:30,c:51}]}, question:'Your rule is "buy on a bullish pin bar at support." This candle formed right at support (see chart). What do you do?',
+    options:['Enter — this matches the rule','Skip — doesn\'t match','Wait for a different pattern','Double the position size'], correct:0,
+    tip:'A backtest only works if you follow your own rule consistently — this is a textbook match.' },
+  { chart:{ohlc:[{o:41,h:45,l:38,c:42}]}, question:'This candle formed in the middle of a range, not at any support or resistance zone (see chart). Your rule is "buy on a bullish pin bar at support." What do you do?',
+    options:['Skip — no signal here','Enter anyway, it looks bullish','Enter with a smaller size','Change your rule on the spot'], correct:0,
+    tip:'Skipping trades that don\'t match your rule is just as important as taking the ones that do — that discipline is what backtesting builds.' },
+  { chart:{ohlc:[{o:48,h:70,l:46,c:49}]}, question:'This is a shooting star at resistance (see chart). Your rule is "buy on a bullish pin bar at support." What do you do?',
+    options:['Skip — wrong signal type for this system','Enter — it\'s still a reversal pattern','Enter but reverse the direction','Skip the whole session'], correct:0,
+    tip:'A shooting star at resistance is a bearish signal — it doesn\'t match a buy-only rule, even though it\'s a valid pattern.' },
+  { chart:null, icon:'📈', question:'Your backtest shows a 42% win rate at 1:2 RR over 100 trades. Is this worth trading live?',
+    options:['Yes — the expectancy is positive','No — below 50% win rate means it loses','Cannot tell without more data','Only if you increase the RR further'], correct:0,
+    tip:'42% win rate at 1:2 RR: 42 wins x 2R = 84R, 58 losses x 1R = 58R. Net = +26R — solidly profitable, even under 50% win rate.' },
+  { chart:null, icon:'🔬', question:'The main point of backtesting before going live is to:',
+    options:['Test if your rules would have been profitable on historical data, without risking real money','Guarantee your strategy will win in the future','Make trading feel more exciting','Copy what other traders are doing'], correct:0,
+    tip:'Backtesting doesn\'t guarantee future results, but it tells you whether your rules had any edge at all before you risk real capital on them.' },
+];
+
+const SMC_INTRO = [
+  { id:'order-block', name:'Order Block', ohlc:[{o:50,h:52,l:48,c:51},{o:51,h:70,l:50,c:68}], desc:'The small consolidation candle right before a big momentum move — where institutions likely placed large orders.' },
+  { id:'liquidity-sweep', name:'Liquidity Sweep', ohlc:[{o:52,h:54,l:25,c:53}], desc:'Price briefly spikes past a recent high or low — hunting stop losses — then closes back inside the range.' },
+  { id:'fair-value-gap', name:'Fair Value Gap', ohlc:[{o:45,h:75,l:44,c:73}], desc:'A strong, fast, one-directional move that leaves an imbalance in price the market tends to revisit later.' },
+  { id:'change-of-character', name:'Change of Character', ohlc:[{o:20,h:35,l:18,c:33},{o:33,h:34,l:15,c:17}], desc:'Price was trending one way, then sharply breaks through recent structure the other way — an early warning sign.' },
+];
+
+const SMC_SCENARIOS = [
+  { chart:{ohlc:SMC_INTRO[0].ohlc}, question:'This small consolidation candle sits right before a big momentum move (see chart). What is it called?',
+    options:['Order Block','Fair Value Gap','Liquidity Sweep','Change of Character'], correct:0,
+    tip:'Order Blocks are zones where institutions are believed to have placed large orders right before a strong move.' },
+  { chart:{ohlc:SMC_INTRO[1].ohlc}, question:'Price briefly spikes below the recent low, then closes back above it (see chart). This is most likely a:',
+    options:['Liquidity Sweep','Fair Value Gap','Order Block','A news spike'], correct:0,
+    tip:'A liquidity sweep briefly hunts stop losses beyond a level before reversing — exactly this shape.' },
+  { chart:null, icon:'📍', question:'A Fair Value Gap is best described as:',
+    options:['An imbalance/inefficiency in price that the market tends to revisit and fill','A guaranteed reversal signal','Broker manipulation','A type of moving average'], correct:0,
+    tip:'FVGs form during fast, one-directional moves and often get "filled" later as price returns to trade through that zone.' },
+  { chart:{ohlc:SMC_INTRO[3].ohlc}, question:'Price was trending up, then sharply reversed through recent structure (see chart). This shift is called:',
+    options:['Change of Character','Order Block','Fair Value Gap','A Golden Cross'], correct:0,
+    tip:'A Change of Character is an early signal that the prevailing trend may be shifting.' },
+  { chart:null, icon:'🏦', question:'In Smart Money Concepts, "Smart Money" refers to:',
+    options:['Institutional traders who move the market','Any trader who is currently profitable','A specific broker','Automated EA bots only'], correct:0,
+    tip:'SMC is built around trying to read what large institutional players are doing, since their order flow moves the market.' },
+];
+
+const ORDER_SCENARIOS = [
+  { chart:null, icon:'📉', question:'You want to buy Gold only if it drops to $2,280 (currently $2,310). Which order?',
+    options:['Buy limit at $2,280','Market order — buy now','Buy stop at $2,280','Stop loss order'], correct:0,
+    tip:'A buy limit fills when price drops to your level — perfect for buying a pullback.' },
+  { chart:null, icon:'⚡', question:'You want to enter immediately at whatever the current price is. Which order?',
+    options:['Market order','Buy limit','Buy stop','Sell limit'], correct:0,
+    tip:'A market order executes right away at the current price — no waiting for a specific level.' },
+  { chart:null, icon:'📈', question:'You want to buy only if price breaks above $2,320 (currently $2,310), confirming upward momentum. Which order?',
+    options:['Buy stop at $2,320','Buy limit at $2,320','Market order — buy now','Sell stop at $2,320'], correct:0,
+    tip:'A buy stop triggers when price rises to your level — used to confirm a breakout before entering.' },
+  { chart:null, icon:'📊', question:'You want to sell only if price rises to $2,340 (currently $2,310). Which order?',
+    options:['Sell limit at $2,340','Buy limit at $2,340','Sell stop at $2,340','Market order — sell now'], correct:0,
+    tip:'A sell limit fills when price rises to your level — perfect for selling into a rally at resistance.' },
+];
+
+const PS1_SCENARIOS = [
+  { chart:null, icon:'💱', question:'XAUUSD means...',
+    options:['Gold vs US Dollar','Gold vs Euro','Silver vs US Dollar','Gold vs Japanese Yen'], correct:0,
+    tip:'XAU is the ISO code for Gold, USD for US Dollar. XAUUSD = the price of Gold in US Dollars.' },
+  { chart:null, icon:'🪙', question:'Which of these is a commodity, not a currency pair?',
+    options:['Gold (XAU)','EUR/USD','GBP/JPY','USD/CAD'], correct:0,
+    tip:'Gold is a commodity priced against a currency (like USD) — the other three are pure currency-to-currency pairs.' },
+  { chart:null, icon:'🔀', question:'XAUUSD trading sits at the crossover of which two markets?',
+    options:['Commodities + Forex','Stocks + Crypto','Bonds + Commodities','Forex + Crypto'], correct:0,
+    tip:'You\'re trading a commodity (Gold) priced in a currency (US Dollars) — that\'s the commodities + forex crossover.' },
+];
+
+const PS2_SCENARIOS = [
+  { chart:null, icon:'😨', question:'What usually happens to Gold when people panic or fear?',
+    options:['Gold goes up','Gold drops sharply','Gold moves sideways','Gold gets delisted'], correct:0,
+    tip:'Gold is a safe-haven asset. Fear = demand for Gold = price rises.' },
+  { chart:null, icon:'🔁', question:'What does "Forex" mean?',
+    options:['Exchanging currencies','Owning a piece of a company','Buying commodities only','A type of stock exchange'], correct:0,
+    tip:'Forex = foreign exchange — trading one currency against another, like USD vs PHP.' },
+  { chart:null, icon:'💧', question:'Why is Gold popular with retail traders?',
+    options:['Most liquid commodity globally, trades 24hrs/day 5 days/week','It never loses value','It has no spread','It\'s only available to institutions'], correct:0,
+    tip:'That round-the-clock liquidity is exactly what makes Gold practical for retail traders in any timezone.' },
+];
+
+const PS3_SCENARIOS = [
+  { chart:null, icon:'📉', question:'If you short Gold at $2,400 and it falls to $2,350, you:',
+    options:['Made $50 per oz profit','Lost money','Broke even','Got margin called'], correct:0,
+    tip:'Short = profit when price goes DOWN. Sold at 2400, bought back at 2350 = $50 gain per oz.' },
+  { chart:null, icon:'⬆️', question:'Buying an asset now, hoping to sell it higher later, is called:',
+    options:['Going long','Going short','Hedging','Scalping'], correct:0,
+    tip:'"Going long" = buy low, sell high — the most basic way traders make money.' },
+  { chart:null, icon:'⬇️', question:'Selling an asset first, then buying it back lower, is called:',
+    options:['Short selling','Going long','Swing trading','Averaging down'], correct:0,
+    tip:'Short selling profits from a price decline — sell high first, buy back low later.' },
+];
+
+const PS4_SCENARIOS = [
+  { chart:null, icon:'🐂', question:'In a bull market, the best general strategy is to:',
+    options:['Buy on pullbacks and dips','Short every rally','Stay out of the market','Go against the trend'], correct:0,
+    tip:'In a bull market, dips are generally buying opportunities — trade with the trend.' },
+  { chart:null, icon:'🐻', question:'A bear market is when prices are generally:',
+    options:['Falling','Rising','Unchanged for months','Only moving on weekends'], correct:0,
+    tip:'Bear market = falling prices, the opposite of a bull market.' },
+  { chart:null, icon:'📉', question:'In a bear market, the general strategy is to:',
+    options:['Sell on rallies','Buy on pullbacks','Ignore the trend','Double position size'], correct:0,
+    tip:'In a bear market, rallies are generally selling opportunities — the mirror image of buying dips in a bull market.' },
+];
+
+const PS5_SCENARIOS = [
+  { chart:null, icon:'💰', question:'Bid is $2,300.00, Ask is $2,300.30. The spread is:',
+    options:['$0.30 which is 30 pips','$2,300.00','$0.03 which is 3 pips','$3.00 which is 300 pips'], correct:0,
+    tip:'Spread = Ask minus Bid = $2,300.30 minus $2,300.00 = $0.30 = 30 pips.' },
+  { chart:null, icon:'🏦', question:'The spread is essentially:',
+    options:['The broker\'s built-in fee','A government tax','A bonus paid to traders','An error in the price feed'], correct:0,
+    tip:'The spread is the broker\'s main revenue — built into every single trade you place.' },
+  { chart:null, icon:'📏', question:'ACCM\'s typical XAUUSD spread is around:',
+    options:['20 to 30 pips','1 to 2 pips','200 to 300 pips','There is no spread'], correct:0,
+    tip:'20-30 pips is a competitive, typical spread range for Gold with ACCM.' },
+];
+
+const EL1_SCENARIOS = [
+  { chart:null, icon:'🤝', question:'How does a broker primarily earn revenue?',
+    options:['Through the spread (Bid-Ask gap)','From your losses only','Monthly subscription','By investing your funds'], correct:0,
+    tip:'The spread is the broker\'s main revenue — built into every trade.' },
+  { chart:null, icon:'🚫', question:'Can you trade directly on the market without a broker?',
+    options:['No — a broker is the required middleman','Yes, anyone can trade directly','Only large institutions need one','Only for Gold, not other assets'], correct:0,
+    tip:'A broker is the middleman between you and the market — without one, you simply cannot place trades.' },
+  { chart:null, icon:'⭐', question:'Why does the lesson recommend ACCM for Gold traders in Southeast Asia?',
+    options:['Low Gold spreads, fast execution, and MT5','It\'s the only regulated broker in the world','It has zero spread','It guarantees profits'], correct:0,
+    tip:'Regulated, low Gold spreads, fast MT5 execution — a solid fit for XAUUSD traders in the region.' },
+];
+
+const EL5_SCENARIOS = [
+  { chart:null, icon:'⏳', question:'How long should you trade demo before going live?',
+    options:['At least several consistent profitable weeks','1 day is enough','Demo is useless, go live immediately','At least 3 years'], correct:0,
+    tip:'Consistency over weeks is the standard. If you can\'t be profitable on demo, live will be harder, not easier.' },
+  { chart:null, icon:'💻', question:'A demo account uses:',
+    options:['Virtual money on real market data','Real money on fake data','Virtual money on fake data','Real money with no risk'], correct:0,
+    tip:'Same charts, same spreads, same platform as live — just no real money at risk.' },
+  { chart:null, icon:'🎓', question:'One good use of a demo account is to:',
+    options:['Learn the MT5 platform without risking real money','Guarantee you\'ll be profitable live','Skip learning the platform entirely','Practice only once, then go live'], correct:0,
+    tip:'Getting comfortable with the platform itself, risk-free, is one of demo\'s biggest advantages.' },
+];
+
+const CO1_SCENARIOS = [
+  { chart:null, icon:'📋', question:'The main purpose of a trading plan is to:',
+    options:['Remove emotions via pre-defined rules','Guarantee profits','Copy professional traders','Predict market direction'], correct:0,
+    tip:'A trading plan removes guesswork and emotion from every decision — it\'s your rulebook, not a crystal ball.' },
+  { chart:null, icon:'📝', question:'A solid trading plan should define:',
+    options:['Entry criteria, SL/TP rules, and a max daily loss limit','Only which broker to use','Your favorite chart colors','Nothing — plans limit creativity'], correct:0,
+    tip:'A real plan gets specific: which pairs, which sessions, exact entry criteria, SL/TP rules, and daily limits.' },
+  { chart:null, icon:'❓', question:'Does having a trading plan guarantee profits?',
+    options:['No — it removes guesswork and emotion, but doesn\'t guarantee outcomes','Yes, a plan guarantees profits','Only if you never lose a trade','Only on Gold, not other assets'], correct:0,
+    tip:'A plan improves your process and consistency — it doesn\'t remove risk or guarantee any single trade wins.' },
+];
+
+const CO5_SCENARIOS = [
+  { chart:null, icon:'🕐', question:'The GFX Starter Strategy enters on which timeframe?',
+    options:['M15 entry','H4 signal','H1 structure','M1 precision'], correct:0,
+    tip:'H4 sets the trend bias, H1 finds the S/R, but the actual entry is timed on M15.' },
+  { chart:null, icon:'🕯️', question:'In the GFX Starter Strategy, what confirms your entry?',
+    options:['Candle confirmation (pin bar, engulfing)','A news headline','Your gut feeling','A round number price'], correct:0,
+    tip:'Waiting for a candle confirmation signal at the S/R pullback is what separates a plan from a guess.' },
+  { chart:null, icon:'🎯', question:'What\'s the minimum Risk-Reward target in the GFX Starter Strategy?',
+    options:['1:2 RR','1:1 RR','1:0.5 RR','No RR target specified'], correct:0,
+    tip:'A 1:2 RR minimum means your winners are designed to be worth at least twice your losers.' },
+];
+
+const GR1_SCENARIOS = [
+  { chart:null, icon:'🧠', question:'Why do traders often struggle more on live vs demo?',
+    options:['Real money triggers emotions absent in demo','Demo has better spreads','Live execution is slower','Demo has more indicators'], correct:0,
+    tip:'Real money triggers fear and greed at a level demo trading simply can\'t replicate.' },
+  { chart:null, icon:'⚖️', question:'What\'s the main risk difference between demo and live trading?',
+    options:['Real money brings real psychological pressure','Live accounts have wider spreads by default','Demo accounts are always more profitable','There is no real difference'], correct:0,
+    tip:'The mechanics are identical — it\'s the psychological weight of real money that changes everything.' },
+  { chart:null, icon:'🚧', question:'Does being profitable on demo guarantee you\'ll be profitable live?',
+    options:['No — emotional factors on live are different','Yes, demo results transfer directly','Only if you use a bigger lot size live','Yes, as long as you use the same broker'], correct:0,
+    tip:'Most traders perform well on demo then struggle on their first live account — exactly why this transition needs care.' },
+];
+
+const SCENARIO_QUIZ_MAP = {
+  SR_SCENARIOS, MS_SCENARIOS, PSYCH_SCENARIOS, BACKTEST_SCENARIOS, SMC_SCENARIOS, ORDER_SCENARIOS,
+  PS1_SCENARIOS, PS2_SCENARIOS, PS3_SCENARIOS, PS4_SCENARIOS, PS5_SCENARIOS,
+  EL1_SCENARIOS, EL5_SCENARIOS, CO1_SCENARIOS, CO5_SCENARIOS, GR1_SCENARIOS,
+};
+
 let gq = null;
 
 function startScenarioQuiz(scenarios, lessonId, lessonIdx, iconEmoji){
@@ -1387,6 +1580,12 @@ function openLesson(idx) {
   } else if (l.fibCalc) {
     html += `<div class="candle-quiz"><div class="quiz-q">📐 Fibonacci Calculator</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter a real swing.</p><div class="candle-example-row"><button class="example-btn" onclick="fillFibExample('a')">$2,300 → $2,350</button><button class="example-btn" onclick="fillFibExample('b')">$2,250 → $2,380</button></div><div class="calc-field"><label>Swing Low ($)</label><input type="number" id="fib-low" placeholder="2300" step="0.01"></div><div class="calc-field"><label>Swing High ($)</label><input type="number" id="fib-high" placeholder="2350" step="0.01"></div><div id="fib-err" class="candle-err"></div><div id="fib-result-box"></div><button class="draw-btn" onclick="calcFib()">Calculate Levels</button></div>
     <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
+  } else if (l.journalTool) {
+    html += `<div class="candle-quiz"><div class="quiz-q">📓 Mock Journal Entry</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Pick a direction, a reason, and a result — the feedback depends on more than just win or loss.</p><div class="calc-field"><label>Direction</label><div class="candle-example-row"><button class="example-btn toggle-btn" id="jt-dir-buy" onclick="selectJournalDirection('buy')">Buy</button><button class="example-btn toggle-btn" id="jt-dir-sell" onclick="selectJournalDirection('sell')">Sell</button></div></div><div class="calc-field"><label>Reason for Entry</label><div class="quiz-options" id="jt-reasons"></div></div><div class="calc-field"><label>Result</label><div class="candle-example-row"><button class="example-btn toggle-btn" id="jt-res-win" onclick="selectJournalResult('win')">Win</button><button class="example-btn toggle-btn" id="jt-res-loss" onclick="selectJournalResult('loss')">Loss</button></div></div><div id="jt-err" class="candle-err"></div><div id="jt-result-box"></div><button class="draw-btn" onclick="saveJournalEntry()">Save Journal Entry</button></div>
+    <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
+  } else if (l.sessionCheck) {
+    html += `<div class="candle-quiz"><div class="quiz-q">🕐 Session Checker</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter a Manila time.</p><div class="candle-example-row"><button class="example-btn" onclick="fillSessionExample(21,0)">9:00 PM</button><button class="example-btn" onclick="fillSessionExample(15,30)">3:30 PM</button><button class="example-btn" onclick="fillSessionExample(13,0)">1:00 PM</button></div><div class="calc-field"><label>Hour (0–23, Manila time)</label><input type="number" id="sc-hour" placeholder="21" step="1"></div><div class="calc-field"><label>Minute (0–59)</label><input type="number" id="sc-minute" placeholder="0" step="1"></div><div id="sc-err" class="candle-err"></div><div id="sc-result-box"></div><button class="draw-btn" onclick="checkSession()">Check Session</button></div>
+    <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
   } else if (l.finalCTA) {
     html += `<div class="cta-card" style="margin-top:16px"><div class="cta-title">🎓 You have made it!</div><div class="cta-desc">Open your ACCM account and start applying everything from GFX Academy.</div><a class="cta-link" href="${CFG.accm}" target="_blank">Register with ACCM →</a><div class="accm-note">Affiliated link · Trading involves risk</div></div>
     <a class="wikifx-badge" href="https://www.wikifx.com/fil/dealer/3052942299.html" target="_blank" style="margin-top:10px;display:flex">
@@ -1404,7 +1603,7 @@ function openLesson(idx) {
     html += `<div class="pattern-quiz-wrap" id="pattern-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}${galleryLink}` : ''}</div>`;
   } else if (l.sltpQuiz) {
     html += `<div class="pattern-quiz-wrap" id="sltp-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : ''}</div>`;
-  } else if (l.srQuiz || l.msQuiz) {
+  } else if (l.scenarioQuiz) {
     html += `<div class="pattern-quiz-wrap" id="scenario-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : ''}</div>`;
   } else if (l.quiz) {
     html += `<div class="quiz-card"><div class="quiz-q">🧠 ${l.quiz.q}</div><div class="quiz-options" id="opts_${l.id}"></div><div id="fb_${l.id}"></div>${done?`<div class="done-msg" style="margin-top:6px"><i class="ti ti-check-circle"></i> Already completed!</div>`:''}</div>`;
@@ -1423,8 +1622,12 @@ function openLesson(idx) {
   });
   if (l.patternQuiz && !done) startPatternQuiz(l.id, idx);
   if (l.sltpQuiz && !done) startSLTPQuiz(l.id, idx);
-  if (l.srQuiz && !done) startScenarioQuiz(SR_SCENARIOS, l.id, idx, '🎯');
-  if (l.msQuiz && !done) startScenarioQuiz(MS_SCENARIOS, l.id, idx, '📊');
+  if (l.scenarioQuiz && !done) startScenarioQuiz(SCENARIO_QUIZ_MAP[l.scenarioQuiz], l.id, idx, l.scenarioIcon);
+  if (l.smcIntro) SMC_INTRO.forEach(concept => {
+    const cv = document.getElementById('smc-intro-'+concept.id);
+    if (cv) drawPatternCanvas(cv, concept.ohlc, true);
+  });
+  if (l.journalTool) resetJournalTool();
 
   if (l.quiz && !l.candleQuiz) {
     const optsEl = document.getElementById('opts_'+l.id);
@@ -1693,6 +1896,97 @@ function calcFib(){
     return `<div class="calc-result"${isGolden ? ' style="border-left-color:var(--gold);background:var(--purple-mid)"' : ''}><div class="calc-result-lot" style="font-size:16px">${(l.ratio*100).toFixed(1)}% — $${l.price.toFixed(2)}</div>${isGolden ? `<div class="calc-result-sub">⭐ Golden Ratio — strongest level</div>` : ''}</div>`;
   }).join('');
   resultEl.innerHTML = `<div class="fib-levels">${rows}</div>`;
+}
+
+// ── TRADING JOURNAL MOCK TOOL ────────────────────────────────────────────────
+const JOURNAL_REASONS = [
+  { id:'support', label:'Bounced off support/resistance', planned:true },
+  { id:'bos', label:'Break of Structure confirmation', planned:true },
+  { id:'rsi', label:'RSI oversold/overbought signal', planned:true },
+  { id:'plan', label:'Followed my trading plan exactly', planned:true },
+  { id:'fomo', label:'FOMO — jumped in after a big move', planned:false },
+];
+let jt = { direction:null, reason:null, result:null };
+
+function resetJournalTool(){
+  jt = { direction:null, reason:null, result:null };
+  renderJournalReasons();
+}
+
+function renderJournalReasons(){
+  const wrap = document.getElementById('jt-reasons'); if (!wrap) return;
+  wrap.innerHTML = '';
+  JOURNAL_REASONS.forEach(r => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = r.label;
+    btn.addEventListener('click', () => selectJournalReason(r.id, btn));
+    wrap.appendChild(btn);
+  });
+}
+
+function selectJournalDirection(dir){
+  jt.direction = dir;
+  document.getElementById('jt-dir-buy').classList.toggle('selected', dir === 'buy');
+  document.getElementById('jt-dir-sell').classList.toggle('selected', dir === 'sell');
+}
+
+function selectJournalResult(res){
+  jt.result = res;
+  document.getElementById('jt-res-win').classList.toggle('selected', res === 'win');
+  document.getElementById('jt-res-loss').classList.toggle('selected', res === 'loss');
+}
+
+function selectJournalReason(reasonId, btn){
+  jt.reason = reasonId;
+  document.querySelectorAll('#jt-reasons .quiz-opt').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function saveJournalEntry(){
+  const errEl = document.getElementById('jt-err');
+  const resultEl = document.getElementById('jt-result-box');
+  if (!jt.direction || !jt.reason || !jt.result) { errEl.textContent = 'Pick a direction, a reason, and a result first.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  const reasonObj = JOURNAL_REASONS.find(r => r.id === jt.reason);
+  const planned = reasonObj.planned;
+  let msg, cls;
+  if (planned && jt.result === 'win')       { msg = 'This is exactly what you want more of — a plan-based entry that worked.'; cls = 'bullish'; }
+  else if (planned && jt.result === 'loss') { msg = 'Still a good process — not every planned trade wins, and that\'s fine. Process over outcome.'; cls = 'doji'; }
+  else if (!planned && jt.result === 'win') { msg = 'It worked this time, but don\'t let a lucky win convince you this is repeatable — the reason still wasn\'t plan-based.'; cls = 'doji'; }
+  else                                        { msg = 'This is exactly the pattern your journal should catch and eliminate — an impulsive entry that lost.'; cls = 'bearish'; }
+
+  resultEl.innerHTML = `<div class="candle-result ${cls}"><div class="candle-tag ${cls}">${jt.direction.toUpperCase()} · ${reasonObj.label} · ${jt.result.toUpperCase()}</div><div style="font-size:12px;color:var(--text-muted)">${msg}</div></div>`;
+}
+
+// ── GOLD SESSION CHECKER ─────────────────────────────────────────────────────
+function fillSessionExample(h, m){
+  document.getElementById('sc-hour').value = h;
+  document.getElementById('sc-minute').value = m;
+  checkSession();
+}
+
+function checkSession(){
+  const h = parseFloat(document.getElementById('sc-hour').value);
+  const m = parseFloat(document.getElementById('sc-minute').value);
+  const errEl = document.getElementById('sc-err');
+  const resultEl = document.getElementById('sc-result-box');
+  if ([h, m].some(v => isNaN(v))) { errEl.textContent = 'Enter both hour and minute first.'; resultEl.innerHTML = ''; return; }
+  if (h < 0 || h > 23) { errEl.textContent = 'Hour must be between 0 and 23.'; resultEl.innerHTML = ''; return; }
+  if (m < 0 || m > 59) { errEl.textContent = 'Minute must be between 0 and 59.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  const t = h * 60 + m;
+  let verdict, desc;
+  if (t >= 21*60 && t < 24*60)      { verdict = 'London–NY Overlap'; desc = 'The best window — highest volatility of the day.'; }
+  else if (t >= 15*60 && t < 16*60) { verdict = 'London Open'; desc = 'Session beginning, volatility increasing.'; }
+  else                               { verdict = 'Outside the key windows'; desc = 'Generally lower volatility — no major session is opening right now.'; }
+
+  const newsNote = (Math.abs(t - (20*60+30)) <= 15 || Math.abs(t - (21*60+30)) <= 15)
+    ? `<div class="calc-warn">📰 Heads up — this is close to a scheduled US news release (8:30/9:30 PM PHT). Expect a possible spike.</div>` : '';
+
+  const hh = String(h).padStart(2,'0'), mm = String(m).padStart(2,'0');
+  resultEl.innerHTML = `<div class="calc-result"><div class="calc-result-lot" style="font-size:18px">${hh}:${mm} — ${verdict}</div><div class="calc-result-sub">${desc}</div></div>${newsNote}`;
 }
 
 function drawCandle() {
