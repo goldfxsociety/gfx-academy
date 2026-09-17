@@ -2,13 +2,13 @@
 
 ## Premium Tools (today's feature — needed before it's really usable)
 
-- [ ] Set `TOOLS_ACCESS_CODE` env var on the **GFX Vercel project only** (not AGM1). This is the code you hand out manually after verifying someone's ACCM registration proof on Facebook. Without it, the unlock endpoint returns "Not configured" and nobody can unlock the page.
-- [ ] In `academy.html`, inside the `id="premium-unlocked-view"` block, replace the 3 placeholder `href="#"` links:
-  - Gold Signal Indicator → your TradingView invite-only script page URL
-  - Gold EA Bot → your external download link
-  - Live Zoom Trading Sessions → your Zoom join link
-- [ ] Replace the "Schedule: TBA — check with support for the next session date and time." text with your actual Zoom cadence (e.g. "Every Saturday 8PM Manila time").
+- [x] `TOOLS_ACCESS_CODE` set on the GFX Vercel project (`1234`).
+- [x] Gold Signal Indicator → linked to `https://www.tradingview.com/script/pE2LxQOL-MONEY-ALGORITHM-by-Ben/`.
+- [x] Gold EA Bot → deliberately **not** linked publicly in `academy.html`. Flow is manual: student messages support with MT5 account number + Gmail, you verify, then manually share the Drive folder to that Gmail (Google Drive's per-email sharing, not a public link) along with the license key.
+  - Drive folder (internal reference only — do not paste into academy.html): https://drive.google.com/drive/folders/16tNstCSoWbjgepVWaEjr7m6NpBrZ8D3A?usp=sharing
+- [x] Live Zoom Trading Sessions → replaced with **Live Newbie Training (Discord)**, linking to `https://discord.gg/AZb5Gk9xNP`.
 - [ ] Decide on real copy for the indicator/EA bot names/descriptions if you want something more specific than the generic placeholders currently there.
+- [ ] If the Discord live training has a set schedule (e.g. specific day/time), update the "check the community for the next session schedule" line in `academy.html` with the actual cadence.
 
 ## Other loose ends from earlier sessions
 
