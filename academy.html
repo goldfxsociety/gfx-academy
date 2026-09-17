@@ -1129,6 +1129,9 @@ function shuffle(arr){
 }
 
 const PATTERN_QUIZ_ROUNDS = 5;
+// Patterns whose candle shapes are visually indistinguishable (e.g. Hammer and
+// Pin Bar use near-identical OHLC) — never offered as distractors for each other.
+const PATTERN_LOOKALIKES = { hammer: ['pin-bar'], 'pin-bar': ['hammer'] };
 let pq = null;
 
 function startPatternQuiz(lessonId, lessonIdx){
@@ -1139,7 +1142,8 @@ function startPatternQuiz(lessonId, lessonIdx){
 function renderPatternQuizRound(){
   const wrap = document.getElementById('pattern-quiz-wrap'); if (!wrap) return;
   const p = pq.order[pq.round];
-  const distractors = shuffle(CANDLE_PATTERNS.filter(x => x.id !== p.id)).slice(0,3).map(x => x.name);
+  const excluded = new Set([p.id, ...(PATTERN_LOOKALIKES[p.id]||[])]);
+  const distractors = shuffle(CANDLE_PATTERNS.filter(x => !excluded.has(x.id))).slice(0,3).map(x => x.name);
   const opts = shuffle([p.name, ...distractors]);
   wrap.innerHTML = `<div class="pattern-quiz"><div class="pattern-quiz-progress">Pattern ${pq.round+1} of ${pq.order.length}</div><div class="quiz-q">🕯️ What pattern is this?</div><div class="pattern-quiz-canvas-wrap"><canvas class="pattern-quiz-cv" id="pq-cv" width="140" height="110"></canvas></div><div class="pattern-opts" id="pattern-opts"></div><div id="pattern-fb"></div></div>`;
   drawPatternCanvas(document.getElementById('pq-cv'), p.ohlc, false);
