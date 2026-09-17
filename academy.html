@@ -865,9 +865,7 @@ const QUIZ_FB = {
   ms3:'RSI below 30 = oversold zone. Look for reversal signals.',
   ms4:'61.8% is the golden ratio — the most respected retracement level.',
   ms5:'Top-down: Higher timeframe gives direction. Trade lower timeframes in alignment.',
-  hs2:'SL goes at a logical level where your trade idea is invalidated.',
   hs3:'Moving SL to avoid being stopped out is emotional trading. Honor your SL.',
-  hs4:'35 wins x $30 = $1,050. 65 losses x $10 = $650. Net = +$400 profit.',
   hs5:'A journal reveals your real edge and weaknesses.',
   co1:'A plan removes emotional decisions by pre-defining your rules.',
   co2:'The London-NY overlap (9 PM to 12 AM PHT) is peak Gold volatility.',
@@ -911,9 +909,9 @@ const grades = [
   ]},
   {id:'highschool',icon:'📕',label:'High School',name:'Risk, Strategy & Psychology',desc:'What separates winners from losers.',badge:'🎓',badgeName:'High Schooler!',lessons:[
     {id:'hs1',title:'Position Sizing & Lot Calculation',content:`<h2 class="lesson-header">Position Sizing</h2><p class="lesson-body">Never risk more than <strong>1 to 2% of your account per trade</strong>. Guessing your lot size is how newbie accounts blow up — always calculate it.</p><div class="info-box"><strong>Formula:</strong>Risk divided by (SL pips x Pip Value) = Lot Size<br><br>$1,000 account, 1% risk = $10 max loss.<br>50 pip SL: $10 divided by (50 x $1.00) = 0.20 lot</div><p class="lesson-body">Now calculate your own below — tap an example or enter your real numbers.</p>`,lotCalc:true},
-    {id:'hs2',title:'Stop Loss & Take Profit',content:`<h2 class="lesson-header">Stop Loss & Take Profit</h2><p class="lesson-body">A <strong>Stop Loss (SL)</strong> closes your trade at a set loss level. A <strong>Take Profit (TP)</strong> locks in gains at your target.</p><div class="info-box"><strong>Non-negotiable:</strong> Never trade without a stop loss. Ever.<br><br>Place SL at a logical structure level — below support for longs, above resistance for shorts.</div>`,quiz:{q:'Where should a Stop Loss for a buy trade be placed?',opts:['Random dollar amount below entry','Below the nearest support level','Exactly 50 pips always','Above the previous high'],a:1}},
+    {id:'hs2',title:'Stop Loss & Take Profit',content:`<h2 class="lesson-header">Stop Loss & Take Profit</h2><p class="lesson-body">A <strong>Stop Loss (SL)</strong> closes your trade at a set loss level. A <strong>Take Profit (TP)</strong> locks in gains at your target.</p><div class="info-box"><strong>Non-negotiable:</strong> Never trade without a stop loss. Ever.<br><br>Place SL at a logical structure level — below support for longs, above resistance for shorts.</div><p class="lesson-body">Now test your judgment below — 5 real scenarios.</p>`,sltpQuiz:true},
     {id:'hs3',title:'Trading Psychology',content:`<h2 class="lesson-header">Trading Psychology</h2><p class="lesson-body">90% of retail traders lose — and most of it is psychology, not strategy.</p><div class="info-box"><strong>The Big 3 Killers:</strong><br>😨 Fear → closing winners too early<br>😤 Greed → holding losers hoping for reversals<br>😱 FOMO → chasing moves after they have happened</div>`,quiz:{q:'Moving your Stop Loss further to give the trade more room is:',opts:['Smart trade management','FOMO','Greed and hope bias — a dangerous habit','Professional scaling'],a:2}},
-    {id:'hs4',title:'Risk-Reward Ratio',content:`<h2 class="lesson-header">Risk-Reward Ratio</h2><p class="lesson-body">RR compares how much you risk vs how much you aim to make. <strong>1:2 RR</strong> = risk $10 to make $20.</p><div class="info-box"><strong>Why it matters:</strong><br>With 1:2 RR and 40% win rate:<br>4 wins x $20 = $80<br>6 losses x $10 = $60<br>Net = +$20 — profitable!</div>`,quiz:{q:'A trader wins 35% with 1:3 RR, risking $10 over 100 trades:',opts:['Net loss','Break even','Net profit','Cannot determine'],a:2}},
+    {id:'hs4',title:'Risk-Reward Ratio',content:`<h2 class="lesson-header">Risk-Reward Ratio</h2><p class="lesson-body">RR compares how much you risk vs how much you aim to make. <strong>1:2 RR</strong> = risk $10 to make $20.</p><div class="info-box"><strong>Why it matters:</strong><br>With 1:2 RR and 40% win rate:<br>4 wins x $20 = $80<br>6 losses x $10 = $60<br>Net = +$20 — profitable!</div><p class="lesson-body">Play with your own numbers below — see exactly when a strategy is profitable, break-even, or a loser.</p>`,rrCalc:true},
     {id:'hs5',title:'Building a Trading Journal',content:`<h2 class="lesson-header">The Trading Journal</h2><p class="lesson-body">The most underused tool by retail traders and the most used by professionals.</p><div class="info-box"><strong>Log every trade:</strong><br>• Date and time · Pair · Direction<br>• Entry, SL, TP · Lot size<br>• Reason for entry · Result · Chart screenshot</div>`,quiz:{q:'The main purpose of a trading journal is to:',opts:['Show off trades','Track P&L for tax only','Identify performance patterns and improve systematically','Predict the next trade'],a:2}},
   ]},
   {id:'college',icon:'📓',label:'College',name:'Building Your Trading System',desc:'Strategy, backtesting, live prep.',badge:'🏛️',badgeName:'College Grad!',lessons:[
@@ -1017,7 +1015,7 @@ const LESSON_TIME = {
   ps1:'3 min',ps2:'4 min',ps3:'3 min',ps4:'3 min',ps5:'3 min',
   el1:'4 min',el2:'6 min',el2b:'6 min',el3:'4 min',el4:'4 min',el5:'4 min',
   ms1:'5 min',ms2:'5 min',ms3:'5 min',ms4:'4 min',ms5:'4 min',
-  hs1:'6 min',hs2:'4 min',hs3:'5 min',hs4:'4 min',hs5:'4 min',
+  hs1:'6 min',hs2:'6 min',hs3:'5 min',hs4:'6 min',hs5:'4 min',
   co1:'5 min',co2:'4 min',co3:'5 min',co4:'5 min',co5:'5 min',
   gr1:'4 min',gr2:'4 min',gr3:'3 min',
 };
@@ -1183,6 +1181,68 @@ function finishPatternQuiz(){
   markNonQuiz(pq.lessonId, pq.lessonIdx);
 }
 
+// ── STOP LOSS / TAKE PROFIT SCENARIO QUIZ ───────────────────────────────────
+const SLTP_SCENARIOS = [
+  { id:'buy-support', chart:{ohlc:[{o:52,h:54,l:30,c:51}]}, question:'Buy trade at support (see chart). Where should the Stop Loss go?',
+    options:['Just below the support zone','10 pips below entry, no matter what','Above the entry price','At the exact entry price'], correct:0,
+    tip:'SL below support gives the trade room to breathe — if price truly breaks support, your trade idea is invalidated anyway.' },
+  { id:'sell-resistance', chart:{ohlc:[{o:48,h:70,l:46,c:49}]}, question:'Sell trade at resistance (see chart). Where should the Stop Loss go?',
+    options:['Just above the resistance zone','10 pips above entry, no matter what','Below the entry price','At the exact entry price'], correct:0,
+    tip:'SL above resistance mirrors the same logic — if price breaks back above resistance, the sell idea is invalidated.' },
+  { id:'buy-tp', chart:{ohlc:[{o:55,h:58,l:48,c:50},{o:46,h:65,l:44,c:63}]}, question:'Buy trade already in profit (see chart). Where’s a logical Take Profit?',
+    options:['At the next resistance / structure level','Whenever it "feels" high enough','Exactly where you placed your SL','There’s no need for a TP'], correct:0,
+    tip:'A logical TP is tied to structure, same as your SL — not a gut feeling and not skipped entirely.' },
+  { id:'never-skip-sl', chart:null, icon:'⚠️', question:'You’re very confident about a trade. Is it okay to skip the Stop Loss?',
+    options:['No — always use a stop loss, confidence isn’t protection','Yes, if you’re sure','Only for small accounts','Only on Gold, not other pairs'], correct:0,
+    tip:'The market doesn’t know how confident you are. A stop loss is what protects your account when a "sure thing" doesn’t play out.' },
+  { id:'moving-sl', chart:null, icon:'🛑', question:'Price is about to hit your Stop Loss. What should you do?',
+    options:['Let it hit — honor your stop','Move the SL further away to avoid the loss','Add more to the position to average down','Delete the SL so it can recover'], correct:0,
+    tip:'Moving your SL to avoid a loss turns a small, planned loss into a potentially much bigger one. Honor the stop and move on to the next trade.' },
+];
+let sq = null;
+
+function startSLTPQuiz(lessonId, lessonIdx){
+  sq = { lessonId, lessonIdx, round: 0 };
+  renderSLTPQuizRound();
+}
+
+function renderSLTPQuizRound(){
+  const wrap = document.getElementById('sltp-quiz-wrap'); if (!wrap) return;
+  const s = SLTP_SCENARIOS[sq.round];
+  const chartHtml = s.chart ? `<div class="pattern-quiz-canvas-wrap"><canvas class="pattern-quiz-cv" id="sq-cv" width="140" height="110"></canvas></div>` : `<div style="font-size:40px;text-align:center;margin:12px 0">${s.icon}</div>`;
+  wrap.innerHTML = `<div class="pattern-quiz"><div class="pattern-quiz-progress">Scenario ${sq.round+1} of ${SLTP_SCENARIOS.length}</div><div class="quiz-q">🛡️ ${s.question}</div>${chartHtml}<div class="quiz-options" id="sltp-opts"></div><div id="sltp-fb"></div></div>`;
+  if (s.chart) drawPatternCanvas(document.getElementById('sq-cv'), s.chart.ohlc, false);
+  const order = shuffle(s.options.map((opt, i) => ({opt, i})));
+  const optsEl = document.getElementById('sltp-opts');
+  order.forEach(({opt, i}) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.addEventListener('click', () => checkSLTPAns(btn, i, s));
+    optsEl.appendChild(btn);
+  });
+}
+
+function checkSLTPAns(btn, chosenIdx, scenario){
+  const optsEl = document.getElementById('sltp-opts'); if (!optsEl) return;
+  optsEl.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  const correct = chosenIdx === scenario.correct;
+  if (correct) {
+    btn.classList.remove('disabled'); btn.classList.add('correct');
+  } else {
+    btn.classList.remove('disabled'); btn.classList.add('wrong');
+    const correctText = scenario.options[scenario.correct];
+    optsEl.querySelectorAll('.quiz-opt').forEach(b => { if (b.textContent === correctText) { b.classList.remove('disabled'); b.classList.add('correct'); } });
+  }
+  const isLast = sq.round + 1 >= SLTP_SCENARIOS.length;
+  const fbEl = document.getElementById('sltp-fb');
+  fbEl.innerHTML = `<div class="quiz-feedback ${correct?'correct':'wrong'}">${correct?'✓ Correct!':'Not quite.'} ${scenario.tip}</div><button class="next-btn" id="sltp-next-btn">${isLast?'Finish →':'Next Scenario →'}</button>`;
+  document.getElementById('sltp-next-btn').onclick = () => { isLast ? finishSLTPQuiz() : (sq.round++, renderSLTPQuizRound()); };
+}
+
+function finishSLTPQuiz(){
+  markNonQuiz(sq.lessonId, sq.lessonIdx);
+}
+
 function renderGradePath() {
   const el = document.getElementById('grade-path'); el.innerHTML = '';
   grades.forEach((g, i) => {
@@ -1225,6 +1285,9 @@ function openLesson(idx) {
   } else if (l.lotCalc) {
     html += `<div class="candle-quiz"><div class="quiz-q">🧮 Lot Size Calculator</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter your own account numbers.</p><div class="candle-example-row"><button class="example-btn" onclick="fillLotExample('conservative')">$500 · 1%</button><button class="example-btn" onclick="fillLotExample('standard')">$1,000 · 2%</button><button class="example-btn" onclick="fillLotExample('bigger')">$5,000 · 0.5%</button></div><div class="calc-field"><label>Account Balance ($)</label><input type="number" id="lc-balance" placeholder="1000" step="0.01"></div><div class="calc-field"><label>Risk per Trade (%)</label><input type="number" id="lc-risk" placeholder="1" step="0.1"></div><div class="calc-field"><label>Stop Loss (pips)</label><input type="number" id="lc-sl" placeholder="50" step="1"></div><div id="lc-err" class="candle-err"></div><div id="lc-result-box"></div><button class="draw-btn" onclick="calcLotSize()">Calculate Lot Size</button></div>
     <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
+  } else if (l.rrCalc) {
+    html += `<div class="candle-quiz"><div class="quiz-q">🧮 Risk-Reward Calculator</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter your own numbers.</p><div class="candle-example-row"><button class="example-btn" onclick="fillRRExample('good')">40% · 1:2 RR</button><button class="example-btn" onclick="fillRRExample('quiz')">35% · 1:3 RR</button><button class="example-btn" onclick="fillRRExample('bad')">40% · 1:1 RR</button></div><div class="calc-field"><label>Win Rate (%)</label><input type="number" id="rr-winrate" placeholder="40" step="1"></div><div class="calc-field"><label>Reward Multiple (the "2" in 1:2 RR)</label><input type="number" id="rr-multiple" placeholder="2" step="0.1"></div><div class="calc-field"><label>Risk per Trade ($)</label><input type="number" id="rr-risk" placeholder="10" step="0.01"></div><div class="calc-field"><label>Number of Trades</label><input type="number" id="rr-trades" placeholder="10" step="1"></div><div id="rr-err" class="candle-err"></div><div id="rr-result-box"></div><button class="draw-btn" onclick="calcRR()">Calculate</button></div>
+    <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
   } else if (l.finalCTA) {
     html += `<div class="cta-card" style="margin-top:16px"><div class="cta-title">🎓 You have made it!</div><div class="cta-desc">Open your ACCM account and start applying everything from GFX Academy.</div><a class="cta-link" href="${CFG.accm}" target="_blank">Register with ACCM →</a><div class="accm-note">Affiliated link · Trading involves risk</div></div>
     <a class="wikifx-badge" href="https://www.wikifx.com/fil/dealer/3052942299.html" target="_blank" style="margin-top:10px;display:flex">
@@ -1240,6 +1303,8 @@ function openLesson(idx) {
   } else if (l.patternQuiz) {
     const galleryLink = (CFG.modules?.candlestickGallery !== false) ? `<button class="next-btn" style="border-color:var(--purple-border);color:var(--text-muted)" onclick="showScreen('gallery')">🕯️ Browse the full Pattern Gallery →</button>` : '';
     html += `<div class="pattern-quiz-wrap" id="pattern-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}${galleryLink}` : ''}</div>`;
+  } else if (l.sltpQuiz) {
+    html += `<div class="pattern-quiz-wrap" id="sltp-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : ''}</div>`;
   } else if (l.quiz) {
     html += `<div class="quiz-card"><div class="quiz-q">🧠 ${l.quiz.q}</div><div class="quiz-options" id="opts_${l.id}"></div><div id="fb_${l.id}"></div>${done?`<div class="done-msg" style="margin-top:6px"><i class="ti ti-check-circle"></i> Already completed!</div>`:''}</div>`;
     if (done && idx+1 < g.lessons.length) html += `<button class="next-btn" style="margin-top:10px" onclick="openLesson(${idx+1})">Next Lesson →</button>`;
@@ -1256,6 +1321,7 @@ function openLesson(idx) {
     if (cv && p) drawPatternCanvas(cv, p.ohlc, true);
   });
   if (l.patternQuiz && !done) startPatternQuiz(l.id, idx);
+  if (l.sltpQuiz && !done) startSLTPQuiz(l.id, idx);
 
   if (l.quiz && !l.candleQuiz) {
     const optsEl = document.getElementById('opts_'+l.id);
@@ -1402,6 +1468,53 @@ function calcLotSize(){
   else if (lotSize > 10) warn += `<div class="calc-warn">⚠️ This is an unusually large position — double-check your numbers before using this in real trading.</div>`;
 
   resultEl.innerHTML = `<div class="calc-result"><div class="calc-result-lot">${lotSize.toFixed(2)} lot</div><div class="calc-result-sub">Risking $${riskAmount.toFixed(2)} (${riskPct}% of $${bal.toFixed(2)}) on a ${sl}-pip stop loss.</div>${warn}</div>`;
+}
+
+// ── RISK-REWARD CALCULATOR ──────────────────────────────────────────────────
+function fillRRExample(preset){
+  const vals = {
+    good:  {winRate:40, rr:2, risk:10, trades:10},
+    quiz:  {winRate:35, rr:3, risk:10, trades:100},
+    bad:   {winRate:40, rr:1, risk:10, trades:10},
+  }[preset];
+  if (!vals) return;
+  document.getElementById('rr-winrate').value = vals.winRate;
+  document.getElementById('rr-multiple').value = vals.rr;
+  document.getElementById('rr-risk').value = vals.risk;
+  document.getElementById('rr-trades').value = vals.trades;
+  calcRR();
+}
+
+function calcRR(){
+  const winRatePct = parseFloat(document.getElementById('rr-winrate').value);
+  const rr = parseFloat(document.getElementById('rr-multiple').value);
+  const risk = parseFloat(document.getElementById('rr-risk').value);
+  const trades = parseFloat(document.getElementById('rr-trades').value);
+  const errEl = document.getElementById('rr-err');
+  const resultEl = document.getElementById('rr-result-box');
+  if ([winRatePct, rr, risk, trades].some(v => isNaN(v))) { errEl.textContent = 'Enter all 4 values first.'; resultEl.innerHTML = ''; return; }
+  if (winRatePct < 0 || winRatePct > 100) { errEl.textContent = 'Win rate must be between 0 and 100.'; resultEl.innerHTML = ''; return; }
+  if (rr <= 0)     { errEl.textContent = 'Reward multiple must be greater than 0.'; resultEl.innerHTML = ''; return; }
+  if (risk <= 0)   { errEl.textContent = 'Risk per trade must be greater than 0.'; resultEl.innerHTML = ''; return; }
+  if (trades <= 0) { errEl.textContent = 'Number of trades must be greater than 0.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  const winRate = winRatePct / 100;
+  const expectancyR = winRate * rr - (1 - winRate);
+  const expectancyUSD = expectancyR * risk;
+  const projectedTotal = expectancyUSD * trades;
+  const breakevenWinRate = 100 / (rr + 1);
+
+  let verdict, verdictClass;
+  if (expectancyR > 0)      { verdict = 'Net Profit';  verdictClass = 'bullish'; }
+  else if (expectancyR < 0) { verdict = 'Net Loss';    verdictClass = 'bearish'; }
+  else                      { verdict = 'Break Even';  verdictClass = 'doji'; }
+
+  let warn = '';
+  if (rr < 1) warn += `<div class="calc-warn">⚠️ Reward smaller than risk — you'll need a high win rate just to survive.</div>`;
+
+  const fmtUSD = n => (n < 0 ? '-$' : '+$') + Math.abs(n).toFixed(2);
+  resultEl.innerHTML = `<div class="calc-result"><div class="calc-result-lot" style="color:${verdictClass==='bearish'?'var(--danger)':verdictClass==='doji'?'var(--text-main)':'var(--success)'}">${verdict}</div><div class="calc-result-sub">Expectancy: ${expectancyR>=0?'+':''}${expectancyR.toFixed(2)}R per trade (${fmtUSD(expectancyUSD)}).<br>Projected over ${trades} trades: ${fmtUSD(projectedTotal)}.<br>Break-even win rate at this RR: ${breakevenWinRate.toFixed(1)}%.</div>${warn}</div>`;
 }
 
 function drawCandle() {

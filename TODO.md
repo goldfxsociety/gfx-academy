@@ -14,12 +14,12 @@
 
 - [x] **Round 1 — Candlesticks (shipped):** `el2` now has a labeled anatomy diagram + 3 "try an example" preset buttons on the plotter; new `el2b` lesson teaches 6 named patterns then runs a 5-round "guess the pattern" quiz game; Gallery tab and the candlestick lesson now cross-link to each other.
 - [x] **Round 2 — Lot Size Calculator (shipped):** `hs1` replaced its abstract MCQ with a live calculator (balance, risk %, SL pips → lot size), 3 example presets, and validation/warning messages (over-risking, lot rounds to 0, unrealistically large position). Also fixed a pre-existing 100x math error in the lesson's worked example (`0.02 lot` → the mathematically correct `0.20 lot`, cross-checked against `el3`'s already-shipped pip convention).
+- [x] **Round 3 — Stop Loss/Take Profit scenario quiz (shipped):** `hs2` replaced its single MCQ with a 5-scenario "what would you do" quiz — SL placement at support/resistance (with mini charts), TP placement, and 2 discipline questions (never skip the SL, don't move it to avoid a loss). Reuses the existing MCQ option styling and candle-drawing code, no freeform chart-click interaction (kept the front-end surface small and testable).
+- [x] **Round 4 — Risk-Reward Calculator (shipped):** `hs4` replaced its MCQ with a live expectancy calculator (win rate, reward multiple, risk $, # trades → Net Profit/Loss/Break-Even verdict, expectancy in R and $, projected total, break-even win rate). 3 presets, including one that deliberately shows a *losing* setup at the same win rate as the lesson's own profitable example, to make the RR-vs-win-rate tradeoff concrete. Formula cross-checked against both the lesson's existing worked example and the quiz it replaced — both matched exactly.
 
 Prioritized by what actually protects a newbie's account, not just what's easiest to build. One round at a time, same pattern as candlesticks: pick a lesson, make the concept a tool/game instead of a paragraph, reuse existing canvas/quiz code where possible.
 
-**Tier 1 — account-safety tools (do these first, highest real-world stakes):**
-- [ ] Stop Loss & Take Profit (`hs2`) → "place your SL/TP" on a mini chart exercise, pairs naturally with the calculator above.
-- [ ] Risk-Reward Ratio (`hs4`) → interactive RR/expectancy calculator: enter win rate + RR → shows whether the system is profitable long-run.
+**Tier 1 — account-safety tools:** all shipped (Position Sizing, Stop Loss/Take Profit, Risk-Reward). Tier 1 complete.
 
 **Tier 2 — chart-reading skills (visual, same spirit as the candlestick round):**
 - [ ] Support & Resistance Zones (`ms1`) → tap-the-zone exercise on a mini price chart.
