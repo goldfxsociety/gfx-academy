@@ -129,6 +129,14 @@ canvas.pattern-quiz-cv{background:var(--purple-card);border:1px solid var(--purp
 .calc-result-lot{font-family:'Syne',sans-serif;font-size:22px;font-weight:700;color:var(--gold)}
 .calc-result-sub{font-size:12px;color:var(--text-muted);margin-top:5px;line-height:1.6}
 .calc-warn{font-size:12px;color:var(--gold);background:var(--purple-mid);border-radius:7px;padding:9px 11px;margin-top:8px;line-height:1.5}
+.rsi-gauge{position:relative;height:16px;border-radius:8px;overflow:visible;display:flex;margin:16px 0 4px}
+.rsi-gauge-zone{height:100%;border-radius:0}
+.rsi-gauge-zone.low{width:30%;background:var(--gold-dim);border-radius:8px 0 0 8px}
+.rsi-gauge-zone.mid{width:40%;background:var(--purple-card)}
+.rsi-gauge-zone.high{width:30%;background:var(--gold-dim);border-radius:0 8px 8px 0}
+.rsi-gauge-marker{position:absolute;top:-4px;width:3px;height:24px;background:var(--text-main);border-radius:2px}
+.rsi-gauge-scale{display:flex;justify-content:space-between;font-size:10px;color:var(--text-dim);margin-bottom:6px}
+.fib-levels{display:flex;flex-direction:column;gap:8px;margin-top:12px}
 .badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 .badge-card{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:12px;padding:13px;text-align:center}
 .badge-card.earned{border-color:var(--gold-dim)}
@@ -860,10 +868,6 @@ const QUIZ_FB = {
   el3:'0.1 lot = 10 oz. 1 pip = $0.10 for 0.1 lot. 100 x $0.10 = $10.',
   el4:'A buy limit fills when price drops to your level. Perfect for buying pullbacks.',
   el5:'Consistency over weeks is the standard. If you cannot be profitable on demo, live will be harder.',
-  ms1:'Role reversal: broken resistance becomes new support.',
-  ms2:'HH + HL = uptrend. The most fundamental definition of bullish market structure.',
-  ms3:'RSI below 30 = oversold zone. Look for reversal signals.',
-  ms4:'61.8% is the golden ratio — the most respected retracement level.',
   ms5:'Top-down: Higher timeframe gives direction. Trade lower timeframes in alignment.',
   hs3:'Moving SL to avoid being stopped out is emotional trading. Honor your SL.',
   hs5:'A journal reveals your real edge and weaknesses.',
@@ -901,10 +905,10 @@ const grades = [
     {id:'el5',title:'Demo Account — Your Practice Ground',content:`<h2 class="lesson-header">The Demo Account</h2><p class="lesson-body">A demo account uses <strong>virtual money</strong> on real market data. Same charts, same spreads, same platform — just no real money at risk.</p><div class="info-box"><strong>How to use it:</strong><br>• Test your strategy without risking capital<br>• Learn the MT5 platform<br>• Aim for at least 4 profitable weeks before switching to live</div>`,quiz:{q:'How long should you trade demo before going live?',opts:['1 day is enough','At least several consistent profitable weeks','Demo is useless, go live immediately','At least 3 years'],a:1}},
   ]},
   {id:'middle',icon:'📙',label:'Middle School',name:'Technical Analysis 101',desc:'S/R, trends, indicators.',badge:'📐',badgeName:'Middle Schooler!',lessons:[
-    {id:'ms1',title:'Support & Resistance Zones',content:`<h2 class="lesson-header">Support & Resistance</h2><p class="lesson-body"><strong>Support</strong> is a price floor where buyers overpower sellers. <strong>Resistance</strong> is a ceiling where sellers dominate.</p><div class="info-box"><strong>Role Reversal:</strong> Broken resistance often becomes new support — and vice versa.</div>`,quiz:{q:'When price breaks above resistance, that level typically becomes:',opts:['A new resistance','Support','Irrelevant','A stop-loss magnet'],a:1}},
-    {id:'ms2',title:'Market Structure & Trends',content:`<h2 class="lesson-header">Market Structure</h2><p class="lesson-body"><strong>Uptrend</strong> = Higher Highs + Higher Lows. <strong>Downtrend</strong> = Lower Highs + Lower Lows.</p><div class="info-box"><strong>The Golden Rule:</strong> Trade WITH the trend. A Break of Structure (BOS) signals a potential trend change.</div>`,quiz:{q:'An uptrend is defined by:',opts:['Lower Highs and Lower Lows','Equal Highs and Lows','Higher Highs and Higher Lows','Random price movement'],a:2}},
-    {id:'ms3',title:'Moving Averages & RSI',content:`<h2 class="lesson-header">Moving Averages & RSI</h2><p class="lesson-body">The <strong>Moving Average (MA)</strong> smooths price to show trend direction. The 50 MA and 200 MA are watched globally.</p><div class="info-box"><strong>Golden Cross:</strong> 50 MA above 200 MA = bullish.<br><strong>Death Cross:</strong> 50 MA below 200 MA = bearish.<br><strong>RSI:</strong> Above 70 = overbought. Below 30 = oversold.</div>`,quiz:{q:'RSI at 25 suggests:',opts:['Strong uptrend confirmed','Overbought — sell now','Possibly oversold — watch for reversal','Trend is sideways'],a:2}},
-    {id:'ms4',title:'Fibonacci Retracement',content:`<h2 class="lesson-header">Fibonacci Retracement</h2><p class="lesson-body">Fibonacci levels are <strong>mathematical ratios</strong> used to find likely reversal zones within a trend.</p><div class="info-box"><strong>Key levels:</strong><br>0.382 — shallow pullback<br>0.500 — mid-level<br>0.618 — the golden ratio, strongest level<br>0.786 — deep pullback</div>`,quiz:{q:'Which Fibonacci level is called the golden ratio?',opts:['23.6%','38.2%','61.8%','100%'],a:2}},
+    {id:'ms1',title:'Support & Resistance Zones',content:`<h2 class="lesson-header">Support & Resistance</h2><p class="lesson-body"><strong>Support</strong> is a price floor where buyers overpower sellers. <strong>Resistance</strong> is a ceiling where sellers dominate.</p><div class="info-box"><strong>Role Reversal:</strong> Broken resistance often becomes new support — and vice versa.</div><p class="lesson-body">Now test your eye for it — 5 real scenarios.</p>`,srQuiz:true},
+    {id:'ms2',title:'Market Structure & Trends',content:`<h2 class="lesson-header">Market Structure</h2><p class="lesson-body"><strong>Uptrend</strong> = Higher Highs + Higher Lows. <strong>Downtrend</strong> = Lower Highs + Lower Lows.</p><div class="info-box"><strong>The Golden Rule:</strong> Trade WITH the trend. A Break of Structure (BOS) signals a potential trend change.</div><p class="lesson-body">Now read the structure yourself — 5 real scenarios.</p>`,msQuiz:true},
+    {id:'ms3',title:'Moving Averages & RSI',content:`<h2 class="lesson-header">Moving Averages & RSI</h2><p class="lesson-body">The <strong>Moving Average (MA)</strong> smooths price to show trend direction. The 50 MA and 200 MA are watched globally.</p><div class="info-box"><strong>Golden Cross:</strong> 50 MA above 200 MA = bullish.<br><strong>Death Cross:</strong> 50 MA below 200 MA = bearish.<br><strong>RSI:</strong> Above 70 = overbought. Below 30 = oversold.</div><p class="lesson-body">Try both tools below with your own numbers.</p>`,maRsiTool:true},
+    {id:'ms4',title:'Fibonacci Retracement',content:`<h2 class="lesson-header">Fibonacci Retracement</h2><p class="lesson-body">Fibonacci levels are <strong>mathematical ratios</strong> used to find likely reversal zones within a trend.</p><div class="info-box"><strong>Key levels:</strong><br>0.382 — shallow pullback<br>0.500 — mid-level<br>0.618 — the golden ratio, strongest level<br>0.786 — deep pullback</div><p class="lesson-body">Calculate real levels below from any swing high and low.</p>`,fibCalc:true},
     {id:'ms5',title:'Timeframes — Which One to Use?',content:`<h2 class="lesson-header">Timeframes</h2><div class="info-box"><strong>Top-down approach:</strong><br>📊 H4 or Daily — overall trend direction<br>📈 H1 — find the setup<br>🔍 M15 or M5 — time your entry precisely</div>`,quiz:{q:'A Gold scalper checks the Daily chart first. Why?',opts:['Daily shows the most pips','To get the overall trend bias before entering on lower timeframes','Daily charts are easier to read','Scalpers never use the daily'],a:1}},
   ]},
   {id:'highschool',icon:'📕',label:'High School',name:'Risk, Strategy & Psychology',desc:'What separates winners from losers.',badge:'🎓',badgeName:'High Schooler!',lessons:[
@@ -1014,7 +1018,7 @@ function renderFooters() {
 const LESSON_TIME = {
   ps1:'3 min',ps2:'4 min',ps3:'3 min',ps4:'3 min',ps5:'3 min',
   el1:'4 min',el2:'6 min',el2b:'6 min',el3:'4 min',el4:'4 min',el5:'4 min',
-  ms1:'5 min',ms2:'5 min',ms3:'5 min',ms4:'4 min',ms5:'4 min',
+  ms1:'6 min',ms2:'6 min',ms3:'6 min',ms4:'6 min',ms5:'4 min',
   hs1:'6 min',hs2:'6 min',hs3:'5 min',hs4:'6 min',hs5:'4 min',
   co1:'5 min',co2:'4 min',co3:'5 min',co4:'5 min',co5:'5 min',
   gr1:'4 min',gr2:'4 min',gr3:'3 min',
@@ -1243,6 +1247,94 @@ function finishSLTPQuiz(){
   markNonQuiz(sq.lessonId, sq.lessonIdx);
 }
 
+// ── GENERIC SCENARIO QUIZ (shared by ms1 Support/Resistance and ms2 Market Structure) ──
+const SR_SCENARIOS = [
+  { chart:{ohlc:[{o:60,h:62,l:50,c:52},{o:52,h:54,l:30,c:50},{o:50,h:58,l:48,c:56},{o:56,h:58,l:32,c:54},{o:54,h:60,l:50,c:58}]},
+    question:'Price keeps bouncing off this level (see chart). What is it?',
+    options:['Support','Resistance','A trend line','Random noise'], correct:0,
+    tip:'A level that price repeatedly bounces off of, from below trying to break down, is acting as support.' },
+  { chart:{ohlc:[{o:40,h:50,l:38,c:48},{o:48,h:70,l:46,c:50},{o:50,h:52,l:42,c:44},{o:44,h:68,l:42,c:46},{o:46,h:48,l:38,c:40}]},
+    question:'Price keeps getting rejected from this level (see chart). What is it?',
+    options:['Resistance','Support','A trend line','Random noise'], correct:0,
+    tip:'A level that price repeatedly gets rejected from, from below trying to break up, is acting as resistance.' },
+  { chart:{ohlc:[{o:44,h:50,l:42,c:48},{o:48,h:52,l:46,c:50},{o:50,h:66,l:49,c:64},{o:64,h:65,l:50,c:53},{o:53,h:62,l:51,c:60}]},
+    question:'This level used to be resistance, and price broke above it, pulled back, and is now holding above it. What is it now?',
+    options:['New support','Still resistance','Irrelevant now','A stop-loss magnet'], correct:0,
+    tip:'Role reversal: once resistance breaks and price holds above it on a retest, that old ceiling becomes the new floor.' },
+  { chart:null, icon:'📏', question:'Support and resistance are best treated as:',
+    options:['A zone/area of prices, not one exact number','One exact price to the cent','Only visible on the H4 chart','A fixed number that never changes'], correct:0,
+    tip:'Real markets react to areas, not laser-precise lines — give your zones a bit of breathing room.' },
+  { chart:null, icon:'💪', question:'Which support zone is generally considered stronger?',
+    options:['One that’s been tested multiple times and held','One that’s never been touched before','One that formed 5 minutes ago','One only visible on the M1 chart'], correct:0,
+    tip:'Each successful test adds confidence that buyers will defend that zone again.' },
+];
+
+const MS_SCENARIOS = [
+  { chart:{ohlc:[{o:20,h:28,l:18,c:26},{o:26,h:34,l:24,c:32},{o:32,h:40,l:29,c:38},{o:38,h:46,l:35,c:44},{o:44,h:52,l:41,c:50}]},
+    question:'Looking at this price action (see chart), what’s the trend?',
+    options:['Uptrend — Higher Highs & Higher Lows','Downtrend — Lower Highs & Lower Lows','Sideways / ranging','Cannot tell'], correct:0,
+    tip:'Each swing high and swing low is higher than the last — that’s the textbook definition of an uptrend.' },
+  { chart:{ohlc:[{o:52,h:54,l:44,c:46},{o:46,h:48,l:38,c:40},{o:40,h:42,l:32,c:34},{o:34,h:36,l:26,c:28},{o:28,h:30,l:20,c:22}]},
+    question:'Looking at this price action (see chart), what’s the trend?',
+    options:['Downtrend — Lower Highs & Lower Lows','Uptrend — Higher Highs & Higher Lows','Sideways / ranging','Cannot tell'], correct:0,
+    tip:'Each swing high and swing low is lower than the last — that’s a downtrend.' },
+  { chart:{ohlc:[{o:20,h:28,l:18,c:26},{o:26,h:34,l:24,c:32},{o:32,h:40,l:29,c:38},{o:38,h:39,l:20,c:22}]},
+    question:'Price was making Higher Highs and Higher Lows, then this last candle broke below the previous Higher Low (see chart). This is called:',
+    options:['A Break of Structure (BOS) — possible trend change','Just noise, ignore it','Confirmation to buy more','A new all-time high'], correct:0,
+    tip:'A BOS doesn’t guarantee a full reversal, but it’s the market’s first warning that the uptrend may be over.' },
+  { chart:null, icon:'📈', question:'In a confirmed uptrend, the generally safer approach is to:',
+    options:['Buy on pullbacks / dips','Short every rally','Ignore the trend entirely','Only trade against the trend'], correct:0,
+    tip:'"Trade with the trend" means looking for buy opportunities on pullbacks in an uptrend, not fighting it.' },
+  { chart:{ohlc:[{o:40,h:46,l:36,c:42},{o:42,h:47,l:37,c:41},{o:41,h:45,l:35,c:43},{o:43,h:46,l:38,c:40},{o:40,h:44,l:36,c:42}]},
+    question:'Looking at this price action (see chart), what’s the trend?',
+    options:['Sideways / ranging market','A strong uptrend','A strong downtrend','A Break of Structure'], correct:0,
+    tip:'Highs and lows aren’t progressing in either direction — price is just oscillating in a range.' },
+];
+
+let gq = null;
+
+function startScenarioQuiz(scenarios, lessonId, lessonIdx, iconEmoji){
+  gq = { scenarios, lessonId, lessonIdx, iconEmoji, round: 0 };
+  renderScenarioQuizRound();
+}
+
+function renderScenarioQuizRound(){
+  const wrap = document.getElementById('scenario-quiz-wrap'); if (!wrap) return;
+  const s = gq.scenarios[gq.round];
+  const chartHtml = s.chart ? `<div class="pattern-quiz-canvas-wrap"><canvas class="pattern-quiz-cv" id="gq-cv" width="140" height="110"></canvas></div>` : `<div style="font-size:40px;text-align:center;margin:12px 0">${s.icon}</div>`;
+  wrap.innerHTML = `<div class="pattern-quiz"><div class="pattern-quiz-progress">Scenario ${gq.round+1} of ${gq.scenarios.length}</div><div class="quiz-q">${gq.iconEmoji} ${s.question}</div>${chartHtml}<div class="quiz-options" id="gq-opts"></div><div id="gq-fb"></div></div>`;
+  if (s.chart) drawPatternCanvas(document.getElementById('gq-cv'), s.chart.ohlc, false);
+  const order = shuffle(s.options.map((opt, i) => ({opt, i})));
+  const optsEl = document.getElementById('gq-opts');
+  order.forEach(({opt, i}) => {
+    const btn = document.createElement('button');
+    btn.className = 'quiz-opt'; btn.textContent = opt;
+    btn.addEventListener('click', () => checkScenarioAns(btn, i, s));
+    optsEl.appendChild(btn);
+  });
+}
+
+function checkScenarioAns(btn, chosenIdx, scenario){
+  const optsEl = document.getElementById('gq-opts'); if (!optsEl) return;
+  optsEl.querySelectorAll('.quiz-opt').forEach(b => b.classList.add('disabled'));
+  const correct = chosenIdx === scenario.correct;
+  if (correct) {
+    btn.classList.remove('disabled'); btn.classList.add('correct');
+  } else {
+    btn.classList.remove('disabled'); btn.classList.add('wrong');
+    const correctText = scenario.options[scenario.correct];
+    optsEl.querySelectorAll('.quiz-opt').forEach(b => { if (b.textContent === correctText) { b.classList.remove('disabled'); b.classList.add('correct'); } });
+  }
+  const isLast = gq.round + 1 >= gq.scenarios.length;
+  const fbEl = document.getElementById('gq-fb');
+  fbEl.innerHTML = `<div class="quiz-feedback ${correct?'correct':'wrong'}">${correct?'✓ Correct!':'Not quite.'} ${scenario.tip}</div><button class="next-btn" id="gq-next-btn">${isLast?'Finish →':'Next Scenario →'}</button>`;
+  document.getElementById('gq-next-btn').onclick = () => { isLast ? finishScenarioQuiz() : (gq.round++, renderScenarioQuizRound()); };
+}
+
+function finishScenarioQuiz(){
+  markNonQuiz(gq.lessonId, gq.lessonIdx);
+}
+
 function renderGradePath() {
   const el = document.getElementById('grade-path'); el.innerHTML = '';
   grades.forEach((g, i) => {
@@ -1288,6 +1380,13 @@ function openLesson(idx) {
   } else if (l.rrCalc) {
     html += `<div class="candle-quiz"><div class="quiz-q">🧮 Risk-Reward Calculator</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter your own numbers.</p><div class="candle-example-row"><button class="example-btn" onclick="fillRRExample('good')">40% · 1:2 RR</button><button class="example-btn" onclick="fillRRExample('quiz')">35% · 1:3 RR</button><button class="example-btn" onclick="fillRRExample('bad')">40% · 1:1 RR</button></div><div class="calc-field"><label>Win Rate (%)</label><input type="number" id="rr-winrate" placeholder="40" step="1"></div><div class="calc-field"><label>Reward Multiple (the "2" in 1:2 RR)</label><input type="number" id="rr-multiple" placeholder="2" step="0.1"></div><div class="calc-field"><label>Risk per Trade ($)</label><input type="number" id="rr-risk" placeholder="10" step="0.01"></div><div class="calc-field"><label>Number of Trades</label><input type="number" id="rr-trades" placeholder="10" step="1"></div><div id="rr-err" class="candle-err"></div><div id="rr-result-box"></div><button class="draw-btn" onclick="calcRR()">Calculate</button></div>
     <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
+  } else if (l.maRsiTool) {
+    html += `<div class="candle-quiz"><div class="quiz-q">📉 RSI Reader</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter an RSI value.</p><div class="candle-example-row"><button class="example-btn" onclick="fillRSIExample(25)">RSI 25</button><button class="example-btn" onclick="fillRSIExample(50)">RSI 50</button><button class="example-btn" onclick="fillRSIExample(75)">RSI 75</button></div><div class="calc-field"><label>RSI Value (0–100)</label><input type="number" id="rsi-input" placeholder="50" step="1"></div><div id="rsi-err" class="candle-err"></div><div id="rsi-result-box"></div><button class="draw-btn" onclick="calcRSI()">Check RSI</button></div>
+    <div class="candle-quiz" style="margin-top:16px"><div class="quiz-q">🔀 Golden / Death Cross Checker</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter your own MA values.</p><div class="candle-example-row"><button class="example-btn" onclick="fillCrossExample('golden')">Golden Cross</button><button class="example-btn" onclick="fillCrossExample('death')">Death Cross</button></div><div class="calc-field"><label>50 MA Value</label><input type="number" id="cross-50" placeholder="2350" step="0.01"></div><div class="calc-field"><label>200 MA Value</label><input type="number" id="cross-200" placeholder="2300" step="0.01"></div><div id="cross-err" class="candle-err"></div><div id="cross-result-box"></div><button class="draw-btn" onclick="calcCross()">Check Cross</button></div>
+    <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
+  } else if (l.fibCalc) {
+    html += `<div class="candle-quiz"><div class="quiz-q">📐 Fibonacci Calculator</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example, or enter a real swing.</p><div class="candle-example-row"><button class="example-btn" onclick="fillFibExample('a')">$2,300 → $2,350</button><button class="example-btn" onclick="fillFibExample('b')">$2,250 → $2,380</button></div><div class="calc-field"><label>Swing Low ($)</label><input type="number" id="fib-low" placeholder="2300" step="0.01"></div><div class="calc-field"><label>Swing High ($)</label><input type="number" id="fib-high" placeholder="2350" step="0.01"></div><div id="fib-err" class="candle-err"></div><div id="fib-result-box"></div><button class="draw-btn" onclick="calcFib()">Calculate Levels</button></div>
+    <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
   } else if (l.finalCTA) {
     html += `<div class="cta-card" style="margin-top:16px"><div class="cta-title">🎓 You have made it!</div><div class="cta-desc">Open your ACCM account and start applying everything from GFX Academy.</div><a class="cta-link" href="${CFG.accm}" target="_blank">Register with ACCM →</a><div class="accm-note">Affiliated link · Trading involves risk</div></div>
     <a class="wikifx-badge" href="https://www.wikifx.com/fil/dealer/3052942299.html" target="_blank" style="margin-top:10px;display:flex">
@@ -1305,6 +1404,8 @@ function openLesson(idx) {
     html += `<div class="pattern-quiz-wrap" id="pattern-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}${galleryLink}` : ''}</div>`;
   } else if (l.sltpQuiz) {
     html += `<div class="pattern-quiz-wrap" id="sltp-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : ''}</div>`;
+  } else if (l.srQuiz || l.msQuiz) {
+    html += `<div class="pattern-quiz-wrap" id="scenario-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : ''}</div>`;
   } else if (l.quiz) {
     html += `<div class="quiz-card"><div class="quiz-q">🧠 ${l.quiz.q}</div><div class="quiz-options" id="opts_${l.id}"></div><div id="fb_${l.id}"></div>${done?`<div class="done-msg" style="margin-top:6px"><i class="ti ti-check-circle"></i> Already completed!</div>`:''}</div>`;
     if (done && idx+1 < g.lessons.length) html += `<button class="next-btn" style="margin-top:10px" onclick="openLesson(${idx+1})">Next Lesson →</button>`;
@@ -1322,6 +1423,8 @@ function openLesson(idx) {
   });
   if (l.patternQuiz && !done) startPatternQuiz(l.id, idx);
   if (l.sltpQuiz && !done) startSLTPQuiz(l.id, idx);
+  if (l.srQuiz && !done) startScenarioQuiz(SR_SCENARIOS, l.id, idx, '🎯');
+  if (l.msQuiz && !done) startScenarioQuiz(MS_SCENARIOS, l.id, idx, '📊');
 
   if (l.quiz && !l.candleQuiz) {
     const optsEl = document.getElementById('opts_'+l.id);
@@ -1515,6 +1618,81 @@ function calcRR(){
 
   const fmtUSD = n => (n < 0 ? '-$' : '+$') + Math.abs(n).toFixed(2);
   resultEl.innerHTML = `<div class="calc-result"><div class="calc-result-lot" style="color:${verdictClass==='bearish'?'var(--danger)':verdictClass==='doji'?'var(--text-main)':'var(--success)'}">${verdict}</div><div class="calc-result-sub">Expectancy: ${expectancyR>=0?'+':''}${expectancyR.toFixed(2)}R per trade (${fmtUSD(expectancyUSD)}).<br>Projected over ${trades} trades: ${fmtUSD(projectedTotal)}.<br>Break-even win rate at this RR: ${breakevenWinRate.toFixed(1)}%.</div>${warn}</div>`;
+}
+
+// ── RSI READER + GOLDEN/DEATH CROSS CHECKER ─────────────────────────────────
+function fillRSIExample(val){
+  document.getElementById('rsi-input').value = val;
+  calcRSI();
+}
+
+function calcRSI(){
+  const val = parseFloat(document.getElementById('rsi-input').value);
+  const errEl = document.getElementById('rsi-err');
+  const resultEl = document.getElementById('rsi-result-box');
+  if (isNaN(val)) { errEl.textContent = 'Enter an RSI value first.'; resultEl.innerHTML = ''; return; }
+  if (val < 0 || val > 100) { errEl.textContent = 'RSI must be between 0 and 100.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  let verdict, desc;
+  if (val < 30)      { verdict = 'Oversold';     desc = 'Watch for a possible bounce — not a guaranteed buy signal.'; }
+  else if (val > 70) { verdict = 'Overbought';   desc = 'Watch for a possible pullback — not a guaranteed sell signal.'; }
+  else                { verdict = 'Neutral Zone'; desc = 'No extreme reading — RSI alone isn\'t giving a strong signal here.'; }
+
+  const markerLeft = Math.max(0, Math.min(100, val));
+  resultEl.innerHTML = `<div class="rsi-gauge"><div class="rsi-gauge-zone low"></div><div class="rsi-gauge-zone mid"></div><div class="rsi-gauge-zone high"></div><div class="rsi-gauge-marker" style="left:calc(${markerLeft}% - 2px)"></div></div><div class="rsi-gauge-scale"><span>0</span><span>30</span><span>70</span><span>100</span></div><div class="calc-result"><div class="calc-result-lot">${verdict} (${val})</div><div class="calc-result-sub">${desc}</div></div>`;
+}
+
+function fillCrossExample(preset){
+  const vals = { golden:{ma50:2350, ma200:2300}, death:{ma50:2280, ma200:2320} }[preset];
+  if (!vals) return;
+  document.getElementById('cross-50').value = vals.ma50;
+  document.getElementById('cross-200').value = vals.ma200;
+  calcCross();
+}
+
+function calcCross(){
+  const ma50 = parseFloat(document.getElementById('cross-50').value);
+  const ma200 = parseFloat(document.getElementById('cross-200').value);
+  const errEl = document.getElementById('cross-err');
+  const resultEl = document.getElementById('cross-result-box');
+  if ([ma50, ma200].some(v => isNaN(v))) { errEl.textContent = 'Enter both MA values first.'; resultEl.innerHTML = ''; return; }
+  if (ma50 <= 0 || ma200 <= 0) { errEl.textContent = 'MA values must be greater than 0.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  let verdict, desc, color;
+  if (ma50 > ma200)      { verdict = 'Golden Cross';       desc = '50 MA is above the 200 MA — generally read as bullish.'; color = 'var(--success)'; }
+  else if (ma50 < ma200) { verdict = 'Death Cross';        desc = '50 MA is below the 200 MA — generally read as bearish.'; color = 'var(--danger)'; }
+  else                    { verdict = 'Right at the Cross'; desc = 'The two MAs are equal — watch closely for which way it breaks.'; color = 'var(--text-main)'; }
+
+  resultEl.innerHTML = `<div class="calc-result"><div class="calc-result-lot" style="color:${color}">${verdict}</div><div class="calc-result-sub">${desc}</div></div>`;
+}
+
+// ── FIBONACCI RETRACEMENT CALCULATOR ────────────────────────────────────────
+function fillFibExample(preset){
+  const vals = { a:{low:2300, high:2350}, b:{low:2250, high:2380} }[preset];
+  if (!vals) return;
+  document.getElementById('fib-low').value = vals.low;
+  document.getElementById('fib-high').value = vals.high;
+  calcFib();
+}
+
+function calcFib(){
+  const low = parseFloat(document.getElementById('fib-low').value);
+  const high = parseFloat(document.getElementById('fib-high').value);
+  const errEl = document.getElementById('fib-err');
+  const resultEl = document.getElementById('fib-result-box');
+  if ([low, high].some(v => isNaN(v))) { errEl.textContent = 'Enter both swing values first.'; resultEl.innerHTML = ''; return; }
+  if (high <= low) { errEl.textContent = 'Swing High must be greater than Swing Low.'; resultEl.innerHTML = ''; return; }
+  errEl.textContent = '';
+
+  const range = high - low;
+  const levels = [0.382, 0.5, 0.618, 0.786].map(ratio => ({ ratio, price: high - range * ratio }));
+  const rows = levels.map(l => {
+    const isGolden = l.ratio === 0.618;
+    return `<div class="calc-result"${isGolden ? ' style="border-left-color:var(--gold);background:var(--purple-mid)"' : ''}><div class="calc-result-lot" style="font-size:16px">${(l.ratio*100).toFixed(1)}% — $${l.price.toFixed(2)}</div>${isGolden ? `<div class="calc-result-sub">⭐ Golden Ratio — strongest level</div>` : ''}</div>`;
+  }).join('');
+  resultEl.innerHTML = `<div class="fib-levels">${rows}</div>`;
 }
 
 function drawCandle() {

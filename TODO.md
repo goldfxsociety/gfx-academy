@@ -21,11 +21,13 @@ Prioritized by what actually protects a newbie's account, not just what's easies
 
 **Tier 1 — account-safety tools:** all shipped (Position Sizing, Stop Loss/Take Profit, Risk-Reward). Tier 1 complete.
 
-**Tier 2 — chart-reading skills (visual, same spirit as the candlestick round):**
-- [ ] Support & Resistance Zones (`ms1`) → tap-the-zone exercise on a mini price chart.
-- [ ] Market Structure & Trends (`ms2`) → label Higher-High/Higher-Low vs Lower-High/Lower-Low on a chart snippet.
-- [ ] Fibonacci Retracement (`ms4`) → drag/select a swing high-low, tool auto-calculates the levels.
-- [ ] Moving Averages & RSI (`ms3`) → interactive RSI gauge + Golden/Death Cross visual toggle.
+**Tier 2 — chart-reading skills (shipped):**
+- [x] Support & Resistance Zones (`ms1`) → 5-scenario "what's this level?" quiz (support/resistance/role-reversal + 2 conceptual questions), mini charts via the existing candle-drawing code.
+- [x] Market Structure & Trends (`ms2`) → 5-scenario "read the structure" quiz (spot uptrend/downtrend/sideways, Break of Structure, trade-with-trend). Both `ms1` and `ms2` share one new generic scenario-quiz engine (didn't touch the already-shipped `el2b`/`hs2` quiz code — new engine only, zero regression risk to those).
+- [x] Moving Averages & RSI (`ms3`) → RSI reader with a CSS-only gauge bar (no canvas) + Golden/Death Cross checker, two mini-tools in one lesson matching the lesson's own scope.
+- [x] Fibonacci Retracement (`ms4`) → calculator (swing high/low → 0.382/0.5/0.618/0.786 levels, golden ratio visually called out). Built as a calculator instead of drag-on-chart, consistent with avoiding freeform chart interaction everywhere in this app.
+
+Tier 2 complete. Middle School grade fully re-tested end to end (all 5 lessons, celebration modal) after the change.
 
 **Tier 3 — decision/scenario simulators (more build effort, still high value):**
 - [ ] Trading Psychology (`hs3`) → scenario cards ("you just lost 3 trades in a row, what do you do?") instead of a single MCQ.
