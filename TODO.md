@@ -10,6 +10,15 @@
 - [ ] Decide on real copy for the indicator/EA bot names/descriptions if you want something more specific than the generic placeholders currently there.
 - [ ] If the Discord live training has a set schedule (e.g. specific day/time), update the "check the community for the next session schedule" line in `academy.html` with the actual cadence.
 
+## Academy interactivity — candlestick round shipped, roadmap for next
+
+- [x] Candlestick lessons overhauled: `el2` now has a labeled anatomy diagram + 3 "try an example" preset buttons on the plotter; new `el2b` lesson teaches 6 named patterns then runs a 5-round "guess the pattern" quiz game; Gallery tab and the candlestick lesson now cross-link to each other.
+- [ ] Next candidates for the same interactive treatment (pick one per round, same pattern as above — reuse existing data/canvas code where possible):
+  - Risk-Reward Ratio (`hs4`) / Position Sizing (`hs1`) → interactive lot-size or RR calculator instead of just a worked example in text.
+  - Support & Resistance (`ms1`) → click-the-zone-on-a-chart exercise.
+  - Fibonacci Retracement (`ms4`) → interactive retracement drag/plot tool.
+  - Trading Journal (`hs5`) → fill-in-the-blank mock journal entry.
+
 ## Other loose ends from earlier sessions
 
 - [ ] `clients/client-maria.json` exists but has **no matching entry** in `api/config.js`'s `CONFIGS` object — if `ACADEMY_CLIENT=client-maria` is ever set on a Vercel project, it silently falls back to the GFX default branding/links instead of Maria's. Either wire it up in `config.js` or delete the orphaned JSON file.

@@ -98,6 +98,29 @@ canvas.candle-canvas{background:var(--purple-card);border:1px solid var(--purple
 .candle-tag.bearish{color:var(--danger)}
 .candle-tag.doji{color:var(--gold)}
 .candle-err{font-size:12px;color:var(--danger);margin-top:5px;min-height:15px}
+.anatomy-wrap{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:14px;padding:16px;margin:14px 0;text-align:center}
+canvas.anatomy-cv{background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;max-width:100%}
+.anatomy-caption{font-size:12px;color:var(--text-muted);margin-top:10px;line-height:1.6}
+.candle-example-row{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.example-btn{flex:1;min-width:90px;background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;color:var(--text-muted);font-family:'Inter',sans-serif;font-size:12px;padding:9px 8px;cursor:pointer}
+.example-btn:active{transform:scale(0.97)}
+.pattern-intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.pattern-intro-card{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:12px;padding:10px;text-align:center}
+canvas.pattern-intro-cv{background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;width:70px;height:60px}
+.pattern-intro-name{font-family:'Syne',sans-serif;font-size:12px;font-weight:600;color:var(--text-main);margin-top:7px}
+.pattern-intro-desc{font-size:11px;color:var(--text-muted);margin-top:3px;line-height:1.5}
+.pattern-quiz{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:14px;padding:16px;margin-top:14px}
+.pattern-quiz-progress{font-size:11px;color:var(--gold);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.pattern-quiz-canvas-wrap{display:flex;justify-content:center;margin:12px 0}
+canvas.pattern-quiz-cv{background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px}
+.pattern-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.pattern-opt{background:var(--purple-card);border:1px solid var(--purple-border);border-radius:8px;color:var(--text-main);font-family:'Inter',sans-serif;font-size:12px;padding:10px 8px;cursor:pointer}
+.pattern-opt.disabled{pointer-events:none;opacity:.55}
+.pattern-opt.correct{border-color:var(--success);color:var(--success)}
+.pattern-opt.wrong{border-color:var(--danger);color:var(--danger)}
+.gallery-lesson-link{background:var(--purple-mid);border:1px solid var(--gold-dim);border-radius:12px;padding:13px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px;cursor:pointer}
+.gallery-lesson-link span{font-size:12px;color:var(--text-muted);line-height:1.5}
+.gallery-lesson-link strong{color:var(--gold)}
 .badge-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}
 .badge-card{background:var(--purple-mid);border:1px solid var(--purple-border);border-radius:12px;padding:13px;text-align:center}
 .badge-card.earned{border-color:var(--gold-dim)}
@@ -367,6 +390,7 @@ canvas.candle-canvas{background:var(--purple-card);border:1px solid var(--purple
   <button class="back-btn" onclick="showScreen('home')"><i class="ti ti-arrow-left"></i> Back</button>
   <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:700;color:var(--gold);margin-bottom:4px">Candlestick Patterns</div>
   <div style="font-size:13px;color:var(--text-muted);margin-bottom:16px;line-height:1.6">Tap any pattern to learn what it means and when to trade it.</div>
+  <div class="gallery-lesson-link" onclick="goToCandleLesson()"><span>New here? <strong>Start with the Candlestick lesson →</strong><br>Learn the anatomy and practice with a quiz first.</span><i class="ti ti-chevron-right" style="color:var(--gold);font-size:18px;flex-shrink:0"></i></div>
   <div class="gallery-grid" id="gallery-grid"></div>
   <div class="footer"><div class="footer-links" id="fl-gallery"></div></div>
 </div>
@@ -858,7 +882,15 @@ const grades = [
   ]},
   {id:'elementary',icon:'📗',label:'Elementary',name:'Brokers, Charts & Basics',desc:'Charts, brokers, your first account.',badge:'✏️',badgeName:'Grade Schooler!',lessons:[
     {id:'el1',title:'What is a Broker?',content:`<h2 class="lesson-header">What is a Broker?</h2><p class="lesson-body">A broker is the <strong>middleman</strong> between you and the market. Without one, you cannot place trades.</p><div class="info-box"><strong>Why ACCM?</strong>Regulated broker with low Gold spreads, fast execution, and MT5 — ideal for XAUUSD traders in Southeast Asia.</div>`,quiz:{q:'How does a broker primarily earn revenue?',opts:['From your losses only','Through the spread (Bid-Ask gap)','Monthly subscription','By investing your funds'],a:1}},
-    {id:'el2',title:'Reading Your First Candlestick',content:`<h2 class="lesson-header">Reading a Candlestick</h2><p class="lesson-body">Every candlestick has <strong>4 values</strong>: Open, High, Low, Close (OHLC). The body = Open-to-Close range. The wicks = High and Low extremes.</p><div class="info-box"><strong>🟢 Bullish (Green):</strong> Close greater than Open — buyers won.<br><strong>🔴 Bearish (Red):</strong> Close less than Open — sellers dominated.</div><p class="lesson-body">Practice the candlestick plotter below — mark complete when done.</p>`,candleQuiz:true},
+    {id:'el2',title:'Candlestick Anatomy',content:`<h2 class="lesson-header">Candlestick Anatomy</h2><p class="lesson-body">Every candlestick has <strong>4 values</strong>: Open, High, Low, Close (OHLC). The body = Open-to-Close range. The wicks = High and Low extremes.</p><div class="anatomy-wrap"><canvas class="anatomy-cv" id="anatomy-cv" width="240" height="180"></canvas><div class="anatomy-caption">This is a <strong>bullish</strong> candle — Close is above Open, so the body is colored green. The thin lines sticking out top and bottom are the <strong>wicks</strong> (High and Low).</div></div><div class="info-box"><strong>🟢 Bullish (Green):</strong> Close greater than Open — buyers won.<br><strong>🔴 Bearish (Red):</strong> Close less than Open — sellers dominated.</div><p class="lesson-body">Tap an example below to see it plotted, then try your own values.</p>`,candleQuiz:true,anatomyDiagram:true},
+    {id:'el2b',title:'Candlestick Patterns You’ll See Every Day',content:`<h2 class="lesson-header">Candlestick Patterns</h2><p class="lesson-body">Individual candles start forming <strong>shapes traders recognize</strong> — these shapes hint at what buyers and sellers are about to do next.</p><div class="pattern-intro-grid">
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-bullish-engulfing" width="70" height="60"></canvas><div class="pattern-intro-name">Bullish Engulfing</div><div class="pattern-intro-desc">Buyers overpower sellers</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-bearish-engulfing" width="70" height="60"></canvas><div class="pattern-intro-name">Bearish Engulfing</div><div class="pattern-intro-desc">Sellers overpower buyers</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-doji" width="70" height="60"></canvas><div class="pattern-intro-name">Doji</div><div class="pattern-intro-desc">Indecision</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-hammer" width="70" height="60"></canvas><div class="pattern-intro-name">Hammer</div><div class="pattern-intro-desc">Bullish reversal</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-shooting-star" width="70" height="60"></canvas><div class="pattern-intro-name">Shooting Star</div><div class="pattern-intro-desc">Bearish reversal</div></div>
+      <div class="pattern-intro-card"><canvas class="pattern-intro-cv" id="pat-intro-pin-bar" width="70" height="60"></canvas><div class="pattern-intro-name">Pin Bar</div><div class="pattern-intro-desc">Rejection signal</div></div>
+    </div><p class="lesson-body">Now test yourself — 5 rounds, guess the pattern from the shape alone.</p>`,introPatterns:['bullish-engulfing','bearish-engulfing','doji','hammer','shooting-star','pin-bar'],patternQuiz:true},
     {id:'el3',title:'Pips, Lots & Leverage',content:`<h2 class="lesson-header">Pips, Lots & Leverage</h2><p class="lesson-body">A <strong>pip</strong> for XAUUSD = $0.01. Gold moving from $2,300.00 to $2,300.50 = 50 pips.</p><div class="info-box"><strong>Lot sizes:</strong>1 Standard = 100 oz · 1 Mini = 10 oz · 1 Micro = 1 oz</div>`,quiz:{q:'Gold moves 100 pips, you hold 0.1 lot. Your P&L is:',opts:['$0.10','$1.00','$10.00','$100.00'],a:2}},
     {id:'el4',title:'Types of Orders',content:`<h2 class="lesson-header">Types of Orders</h2><div class="info-box"><strong>Market Order:</strong> Execute immediately at current price.<br><strong>Limit Order:</strong> Execute at a specific price or better.<br><strong>Stop Order:</strong> Execute when price reaches a trigger level.</div>`,quiz:{q:'You want to buy Gold only if it drops to $2,280 (currently $2,310). Which order?',opts:['Market order — buy now','Buy limit at $2,280','Buy stop at $2,280','Stop loss order'],a:1}},
     {id:'el5',title:'Demo Account — Your Practice Ground',content:`<h2 class="lesson-header">The Demo Account</h2><p class="lesson-body">A demo account uses <strong>virtual money</strong> on real market data. Same charts, same spreads, same platform — just no real money at risk.</p><div class="info-box"><strong>How to use it:</strong><br>• Test your strategy without risking capital<br>• Learn the MT5 platform<br>• Aim for at least 4 profitable weeks before switching to live</div>`,quiz:{q:'How long should you trade demo before going live?',opts:['1 day is enough','At least several consistent profitable weeks','Demo is useless, go live immediately','At least 3 years'],a:1}},
@@ -976,7 +1008,7 @@ function renderFooters() {
 // ── LESSON TIME ESTIMATES ─────────────────────────────────────────────────────
 const LESSON_TIME = {
   ps1:'3 min',ps2:'4 min',ps3:'3 min',ps4:'3 min',ps5:'3 min',
-  el1:'4 min',el2:'5 min',el3:'4 min',el4:'4 min',el5:'4 min',
+  el1:'4 min',el2:'6 min',el2b:'6 min',el3:'4 min',el4:'4 min',el5:'4 min',
   ms1:'5 min',ms2:'5 min',ms3:'5 min',ms4:'4 min',ms5:'4 min',
   hs1:'5 min',hs2:'4 min',hs3:'5 min',hs4:'4 min',hs5:'4 min',
   co1:'5 min',co2:'4 min',co3:'5 min',co4:'5 min',co5:'5 min',
@@ -1087,6 +1119,59 @@ function openPatternModal(p) {
 function closeModal(e){ if(e.target===document.getElementById('gallery-modal')) closeGalleryModal(); }
 function closeGalleryModal(){ document.getElementById('gallery-modal').classList.remove('open'); }
 
+function goToCandleLesson(){ openGrade(1); setTimeout(()=>openLesson(1),50); }
+
+// ── PATTERN QUIZ GAME ────────────────────────────────────────────────────────
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length-1; i>0; i--) { const j = Math.floor(Math.random()*(i+1)); [a[i],a[j]] = [a[j],a[i]]; }
+  return a;
+}
+
+const PATTERN_QUIZ_ROUNDS = 5;
+let pq = null;
+
+function startPatternQuiz(lessonId, lessonIdx){
+  pq = { lessonId, lessonIdx, order: shuffle(CANDLE_PATTERNS).slice(0, PATTERN_QUIZ_ROUNDS), round: 0 };
+  renderPatternQuizRound();
+}
+
+function renderPatternQuizRound(){
+  const wrap = document.getElementById('pattern-quiz-wrap'); if (!wrap) return;
+  const p = pq.order[pq.round];
+  const distractors = shuffle(CANDLE_PATTERNS.filter(x => x.id !== p.id)).slice(0,3).map(x => x.name);
+  const opts = shuffle([p.name, ...distractors]);
+  wrap.innerHTML = `<div class="pattern-quiz"><div class="pattern-quiz-progress">Pattern ${pq.round+1} of ${pq.order.length}</div><div class="quiz-q">🕯️ What pattern is this?</div><div class="pattern-quiz-canvas-wrap"><canvas class="pattern-quiz-cv" id="pq-cv" width="140" height="110"></canvas></div><div class="pattern-opts" id="pattern-opts"></div><div id="pattern-fb"></div></div>`;
+  drawPatternCanvas(document.getElementById('pq-cv'), p.ohlc, false);
+  const optsEl = document.getElementById('pattern-opts');
+  opts.forEach(name => {
+    const btn = document.createElement('button');
+    btn.className = 'pattern-opt'; btn.textContent = name;
+    btn.addEventListener('click', () => checkPatternAns(btn, name, p));
+    optsEl.appendChild(btn);
+  });
+}
+
+function checkPatternAns(btn, chosenName, pattern){
+  const optsEl = document.getElementById('pattern-opts'); if (!optsEl) return;
+  optsEl.querySelectorAll('.pattern-opt').forEach(b => b.classList.add('disabled'));
+  const correct = chosenName === pattern.name;
+  if (correct) {
+    btn.classList.remove('disabled'); btn.classList.add('correct');
+  } else {
+    btn.classList.remove('disabled'); btn.classList.add('wrong');
+    optsEl.querySelectorAll('.pattern-opt').forEach(b => { if (b.textContent === pattern.name) { b.classList.remove('disabled'); b.classList.add('correct'); } });
+  }
+  const isLast = pq.round + 1 >= pq.order.length;
+  const fbEl = document.getElementById('pattern-fb');
+  fbEl.innerHTML = `<div class="quiz-feedback ${correct?'correct':'wrong'}">${correct?'✓ Correct!':`Not quite — it's a ${pattern.name}.`} ${pattern.tip}</div><button class="next-btn" id="pattern-next-btn">${isLast?'Finish →':'Next Pattern →'}</button>`;
+  document.getElementById('pattern-next-btn').onclick = () => { isLast ? finishPatternQuiz() : (pq.round++, renderPatternQuizRound()); };
+}
+
+function finishPatternQuiz(){
+  markNonQuiz(pq.lessonId, pq.lessonIdx);
+}
+
 function renderGradePath() {
   const el = document.getElementById('grade-path'); el.innerHTML = '';
   grades.forEach((g, i) => {
@@ -1124,7 +1209,7 @@ function openLesson(idx) {
   let html = `<div class="lesson-content">${l.content}</div>`;
 
   if (l.candleQuiz) {
-    html += `<div class="candle-quiz"><div class="quiz-q">🕯️ Candlestick Plotter</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Enter OHLC values — draw the candle — see what type it is.</p><div class="candle-inputs"><div class="candle-input-group"><label>Open</label><input type="number" id="ci-open" placeholder="2300" step="0.01"></div><div class="candle-input-group"><label>High</label><input type="number" id="ci-high" placeholder="2320" step="0.01"></div><div class="candle-input-group"><label>Low</label><input type="number" id="ci-low" placeholder="2290" step="0.01"></div><div class="candle-input-group"><label>Close</label><input type="number" id="ci-close" placeholder="2315" step="0.01"></div></div><div id="candle-err" class="candle-err"></div><div class="candle-canvas-row"><div class="candle-canvas-wrap"><div class="candle-canvas-label">Your candle</div><canvas class="candle-canvas" id="candle-cv" width="100" height="200"></canvas></div><div id="candle-result-box" style="flex:1.5"></div></div><button class="draw-btn" onclick="drawCandle()">Draw Candlestick</button></div>
+    html += `<div class="candle-quiz"><div class="quiz-q">🕯️ Candlestick Plotter</div><p style="font-size:13px;color:var(--text-muted);margin-bottom:11px">Tap an example to see it plotted, or enter your own OHLC values.</p><div class="candle-example-row"><button class="example-btn" onclick="fillCandleExample('bullish')">Strong Bullish</button><button class="example-btn" onclick="fillCandleExample('doji')">Doji</button><button class="example-btn" onclick="fillCandleExample('pinbar')">Bullish Pin Bar</button></div><div class="candle-inputs"><div class="candle-input-group"><label>Open</label><input type="number" id="ci-open" placeholder="2300" step="0.01"></div><div class="candle-input-group"><label>High</label><input type="number" id="ci-high" placeholder="2320" step="0.01"></div><div class="candle-input-group"><label>Low</label><input type="number" id="ci-low" placeholder="2290" step="0.01"></div><div class="candle-input-group"><label>Close</label><input type="number" id="ci-close" placeholder="2315" step="0.01"></div></div><div id="candle-err" class="candle-err"></div><div class="candle-canvas-row"><div class="candle-canvas-wrap"><div class="candle-canvas-label">Your candle</div><canvas class="candle-canvas" id="candle-cv" width="100" height="200"></canvas></div><div id="candle-result-box" style="flex:1.5"></div></div><button class="draw-btn" onclick="drawCandle()">Draw Candlestick</button></div>
     <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})">Mark as Complete ✓</button>`}</div>`;
   } else if (l.finalCTA) {
     html += `<div class="cta-card" style="margin-top:16px"><div class="cta-title">🎓 You have made it!</div><div class="cta-desc">Open your ACCM account and start applying everything from GFX Academy.</div><a class="cta-link" href="${CFG.accm}" target="_blank">Register with ACCM →</a><div class="accm-note">Affiliated link · Trading involves risk</div></div>
@@ -1138,6 +1223,9 @@ function openLesson(idx) {
     </a>
     <div class="cta-card" style="margin-top:12px;border-color:var(--purple-border)"><div class="cta-title" style="color:var(--text-main)">💬 Join the Community</div><div class="cta-desc">Connect with fellow GFX traders — ask questions, share setups, grow together.</div><a class="cta-link" href="${CFG.community}" target="_blank" style="background:var(--purple-card);color:var(--text-main)">Join Messenger Community →</a></div>
     <div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>` : `<button class="complete-btn" onclick="markNonQuiz('${l.id}',${idx})" style="margin-top:12px">Mark Complete ✓</button>`}</div>`;
+  } else if (l.patternQuiz) {
+    const galleryLink = (CFG.modules?.candlestickGallery !== false) ? `<button class="next-btn" style="border-color:var(--purple-border);color:var(--text-muted)" onclick="showScreen('gallery')">🕯️ Browse the full Pattern Gallery →</button>` : '';
+    html += `<div class="pattern-quiz-wrap" id="pattern-quiz-wrap"></div><div id="lesson-action-area">${done ? `<div class="done-msg"><i class="ti ti-check-circle"></i> Lesson completed!</div>${idx+1<g.lessons.length?`<button class="next-btn" onclick="openLesson(${idx+1})">Next Lesson →</button>`:''}${galleryLink}` : ''}</div>`;
   } else if (l.quiz) {
     html += `<div class="quiz-card"><div class="quiz-q">🧠 ${l.quiz.q}</div><div class="quiz-options" id="opts_${l.id}"></div><div id="fb_${l.id}"></div>${done?`<div class="done-msg" style="margin-top:6px"><i class="ti ti-check-circle"></i> Already completed!</div>`:''}</div>`;
     if (done && idx+1 < g.lessons.length) html += `<button class="next-btn" style="margin-top:10px" onclick="openLesson(${idx+1})">Next Lesson →</button>`;
@@ -1146,6 +1234,14 @@ function openLesson(idx) {
   document.getElementById('lesson-content-area').innerHTML = html;
   showScreen('lesson');
   updateStickyCta(!l.finalCTA);
+
+  if (l.anatomyDiagram) drawAnatomyDiagram();
+  if (l.introPatterns) l.introPatterns.forEach(pid => {
+    const cv = document.getElementById('pat-intro-'+pid);
+    const p = CANDLE_PATTERNS.find(x => x.id === pid);
+    if (cv && p) drawPatternCanvas(cv, p.ohlc, true);
+  });
+  if (l.patternQuiz && !done) startPatternQuiz(l.id, idx);
 
   if (l.quiz && !l.candleQuiz) {
     const optsEl = document.getElementById('opts_'+l.id);
@@ -1215,6 +1311,46 @@ function closeGradeCompleteModal() {
 }
 
 // ── CANDLESTICK ───────────────────────────────────────────────────────────────
+function drawAnatomyDiagram(){
+  const cv = document.getElementById('anatomy-cv'); if (!cv) return;
+  const ctx = cv.getContext('2d'), W=cv.width, Ht=cv.height, pad=30;
+  const O=45, H=75, L=20, C=62; // fixed illustrative bullish candle (arbitrary units)
+  const range = H-L, toY = v => pad + ((H-v)/range) * (Ht-pad*2);
+  const color = '#3DCB8A';
+  const cx = W/2, bTop = toY(C), bBot = toY(O), bH = Math.max(bBot-bTop, 2);
+  ctx.clearRect(0,0,W,Ht);
+  ctx.strokeStyle = color; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(cx, toY(H)); ctx.lineTo(cx, bTop); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, bBot); ctx.lineTo(cx, toY(L)); ctx.stroke();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.rect(cx-22, bTop, 44, bH); ctx.fill();
+  ctx.strokeStyle = '#C4B5D4'; ctx.fillStyle = '#C4B5D4'; ctx.font = '11px Inter'; ctx.lineWidth = 1;
+  function label(text, y, side){
+    const lx = side==='r' ? cx+34 : cx-34;
+    ctx.textAlign = side==='r' ? 'left' : 'right';
+    ctx.beginPath(); ctx.moveTo(side==='r'?cx+24:cx-24, y); ctx.lineTo(lx-4, y); ctx.stroke();
+    ctx.fillText(text, lx, y+3);
+  }
+  label('High (wick)', toY(H), 'r');
+  label('Body', (bTop+bBot)/2, 'r');
+  label('Close', toY(C), 'l');
+  label('Open', toY(O), 'l');
+  label('Low (wick)', toY(L), 'r');
+}
+
+function fillCandleExample(preset){
+  const vals = {
+    bullish: {o:2300.00, h:2325.00, l:2298.00, c:2322.00},
+    doji:    {o:2300.00, h:2312.00, l:2288.00, c:2300.50},
+    pinbar:  {o:2290.00, h:2300.00, l:2278.00, c:2298.00},
+  }[preset];
+  if (!vals) return;
+  document.getElementById('ci-open').value = vals.o;
+  document.getElementById('ci-high').value = vals.h;
+  document.getElementById('ci-low').value = vals.l;
+  document.getElementById('ci-close').value = vals.c;
+  drawCandle();
+}
+
 function drawCandle() {
   const O=parseFloat(document.getElementById('ci-open').value), H=parseFloat(document.getElementById('ci-high').value),
         L=parseFloat(document.getElementById('ci-low').value),  C=parseFloat(document.getElementById('ci-close').value);
