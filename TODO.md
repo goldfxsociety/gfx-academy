@@ -10,14 +10,30 @@
 - [ ] Decide on real copy for the indicator/EA bot names/descriptions if you want something more specific than the generic placeholders currently there.
 - [ ] If the Discord live training has a set schedule (e.g. specific day/time), update the "check the community for the next session schedule" line in `academy.html` with the actual cadence.
 
-## Academy interactivity — candlestick round shipped, roadmap for next
+## Academy interactivity roadmap
 
-- [x] Candlestick lessons overhauled: `el2` now has a labeled anatomy diagram + 3 "try an example" preset buttons on the plotter; new `el2b` lesson teaches 6 named patterns then runs a 5-round "guess the pattern" quiz game; Gallery tab and the candlestick lesson now cross-link to each other.
-- [ ] Next candidates for the same interactive treatment (pick one per round, same pattern as above — reuse existing data/canvas code where possible):
-  - Risk-Reward Ratio (`hs4`) / Position Sizing (`hs1`) → interactive lot-size or RR calculator instead of just a worked example in text.
-  - Support & Resistance (`ms1`) → click-the-zone-on-a-chart exercise.
-  - Fibonacci Retracement (`ms4`) → interactive retracement drag/plot tool.
-  - Trading Journal (`hs5`) → fill-in-the-blank mock journal entry.
+- [x] **Round 1 — Candlesticks (shipped):** `el2` now has a labeled anatomy diagram + 3 "try an example" preset buttons on the plotter; new `el2b` lesson teaches 6 named patterns then runs a 5-round "guess the pattern" quiz game; Gallery tab and the candlestick lesson now cross-link to each other.
+- [x] **Round 2 — Lot Size Calculator (shipped):** `hs1` replaced its abstract MCQ with a live calculator (balance, risk %, SL pips → lot size), 3 example presets, and validation/warning messages (over-risking, lot rounds to 0, unrealistically large position). Also fixed a pre-existing 100x math error in the lesson's worked example (`0.02 lot` → the mathematically correct `0.20 lot`, cross-checked against `el3`'s already-shipped pip convention).
+
+Prioritized by what actually protects a newbie's account, not just what's easiest to build. One round at a time, same pattern as candlesticks: pick a lesson, make the concept a tool/game instead of a paragraph, reuse existing canvas/quiz code where possible.
+
+**Tier 1 — account-safety tools (do these first, highest real-world stakes):**
+- [ ] Stop Loss & Take Profit (`hs2`) → "place your SL/TP" on a mini chart exercise, pairs naturally with the calculator above.
+- [ ] Risk-Reward Ratio (`hs4`) → interactive RR/expectancy calculator: enter win rate + RR → shows whether the system is profitable long-run.
+
+**Tier 2 — chart-reading skills (visual, same spirit as the candlestick round):**
+- [ ] Support & Resistance Zones (`ms1`) → tap-the-zone exercise on a mini price chart.
+- [ ] Market Structure & Trends (`ms2`) → label Higher-High/Higher-Low vs Lower-High/Lower-Low on a chart snippet.
+- [ ] Fibonacci Retracement (`ms4`) → drag/select a swing high-low, tool auto-calculates the levels.
+- [ ] Moving Averages & RSI (`ms3`) → interactive RSI gauge + Golden/Death Cross visual toggle.
+
+**Tier 3 — decision/scenario simulators (more build effort, still high value):**
+- [ ] Trading Psychology (`hs3`) → scenario cards ("you just lost 3 trades in a row, what do you do?") instead of a single MCQ.
+- [ ] Trading Journal (`hs5`) → fill-in-the-blank mock journal entry.
+- [ ] Backtesting (`co3`) → walk through 10 historical candles, mark your entries, see the result.
+- [ ] Smart Money Concepts (`co4`) → annotated order-block/liquidity-sweep diagram, same style as the candlestick anatomy diagram.
+
+**Tier 4 — lighter polish, lower priority:** remaining mostly-conceptual lessons (Pre-School basics, What is a Broker, Types of Orders, Demo Account, Trading Plan, Gold Sessions, Building Your Strategy, Demo vs Live) could get small touches later — e.g. an order-type matching game for `el4`, a live Manila-time session clock for `co2` — but these aren't where newbies get hurt, so lowest priority.
 
 ## Other loose ends from earlier sessions
 
